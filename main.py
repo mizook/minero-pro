@@ -5,11 +5,13 @@ import numpy as np
 
 HEADERS = ["X", "Y", "Z", "TONELAJE", "METAL", "METAL 2"]
 
+
 def read_scenarios():
     scenarios_list = []
     for file in os.listdir('scenarios'):
         scenarios_list.append(file)
     return scenarios_list
+
 
 def block_colors(scenario_df):
     # Encontrar el valor máximo y mínimo de la columna "METAL"
@@ -33,13 +35,14 @@ def block_colors(scenario_df):
     for val in normalized_metal:
         custom_colors.append(colors[int(round(val))])
     return custom_colors
-    
+
+
 def main():
     files_list = read_scenarios()
     scenario_df = pd.read_csv(f'scenarios/{files_list[0]}', sep=',')
-    
+
     scenario_df.columns = HEADERS
-    
+
     # Coordenadas para los bloques
     x = scenario_df['X']
     y = scenario_df['Y']
@@ -61,6 +64,7 @@ def main():
     ax.set_zlabel('Z')
 
     plt.show()
+
 
 if __name__ == "__main__":
     main()
