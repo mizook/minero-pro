@@ -1,4 +1,4 @@
-# API Django Rest Framework con Websockets
+# Modelador de minas 3D Minero Pro
 
 ## Prerequisitos
 
