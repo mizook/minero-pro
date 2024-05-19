@@ -5,7 +5,7 @@ def read_coordinates(filename):
     df = pd.read_csv(filename, header=None, names=["X", "Y", "Z", "Tonelaje", "Metal", "Metal2"])
     return df
 
-def main():
+def open_scenary(file_name):
     # Lee las coordenadas del archivo
     coordinates_df = read_coordinates("scenarios/Scenario09.txt")
 
@@ -29,4 +29,4 @@ def main():
     plotter.show()
 
 if __name__ == "__main__":
-    main()
+    open_scenary('Scenario00.txt')
