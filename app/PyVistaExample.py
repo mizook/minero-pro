@@ -7,7 +7,7 @@ def read_coordinates(filename):
 
 def open_scenary(file_name):
     # Lee las coordenadas del archivo
-    coordinates_df = read_coordinates("scenarios/Scenario09.txt")
+    coordinates_df = read_coordinates("data/scenarios/Scenario09.txt")
 
     # Crea un contenedor para todos los cubos
     grid = pv.MultiBlock()
