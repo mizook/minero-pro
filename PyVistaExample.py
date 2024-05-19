@@ -1,26 +1,32 @@
+import pandas as pd
 import pyvista as pv
-import numpy as np
 
-# Leer las coordenadas desde el archivo de texto
-file_path = 'scenarios/Scenario00.txt'
-data = np.loadtxt(file_path, delimiter=',', dtype=float)
+def read_coordinates(filename):
+    df = pd.read_csv(filename, header=None, names=["X", "Y", "Z", "Tonelaje", "Metal", "Metal2"])
+    return df
 
-# Extraer las coordenadas x, y, z y el tonelaje de cada fila
-x = data[:, 0]
-y = data[:, 1]
-z = data[:, 2]
-tonelaje = data[:, 3]
+def main():
+    # Lee las coordenadas del archivo
+    coordinates_df = read_coordinates("scenarios/Scenario09.txt")
 
-# Crear una malla PyVista a partir de las coordenadas x, y, z
-mesh = pv.StructuredGrid(x, y, z)
+    # Crea un contenedor para todos los cubos
+    grid = pv.MultiBlock()
 
-# Agregar el tonelaje como datos escalares a la malla
-mesh['tonelaje'] = tonelaje
+    # Itera sobre cada fila en el DataFrame
+    for _, row in coordinates_df.iterrows():
+        # Obtiene las coordenadas del cubo
+        x, y, z = row["X"], row["Y"], row["Z"]
 
-# Deformar la malla según el tonelaje
-warped = mesh.warp_by_scalar()
+        # Crea el cubo en la posición dada
+        cube = pv.Cube(center=(x, y, z), x_length=1, y_length=1, z_length=1)
 
-# Visualizar la malla deformada como un mapa de elevación superficial con colores según el tonelaje
-p = pv.Plotter()
-p.add_mesh(warped, scalars='tonelaje', cmap='viridis')
-p.show()
+        # Agrega el cubo al contenedor
+        grid.append(cube)
+
+    # Visualiza los cubos
+    plotter = pv.Plotter()
+    plotter.add_mesh(grid, color="orange", show_edges=True)
+    plotter.show()
+
+if __name__ == "__main__":
+    main()
