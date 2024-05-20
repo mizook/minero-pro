@@ -1,4 +1,5 @@
 from nicegui import ui
+from app.Statistics import show_scenario_statistics
 
 button_class = 'text-xl font-bold w-[300px] lg:w-[500px] mt-5 bg-yellow-8 text-black'
 title_class = 'text-4xl font-bold text-center mt-2'
@@ -13,7 +14,16 @@ def estadisticas_page():
             ui.image('assets/minero-pro.svg').classes('ml-5 w-[42px] h-[42px]')
 
         with ui.list().classes('grid place-items-center'):
-            ui.button('WORK IN PROGRESS', on_click=lambda: ui.notify('WIP')).classes(button_class)
+            ui.button('Escenario 1', on_click=lambda: show_scenario_statistics('Scenario00.txt')).classes(button_class)
+            ui.button('Escenario 2', on_click=lambda: show_scenario_statistics('Scenario01.txt')).classes(button_class)
+            ui.button('Escenario 3', on_click=lambda: show_scenario_statistics('Scenario02.txt')).classes(button_class)
+            ui.button('Escenario 4', on_click=lambda: show_scenario_statistics('Scenario03.txt')).classes(button_class)
+            ui.button('Escenario 5', on_click=lambda: show_scenario_statistics('Scenario04.txt')).classes(button_class)
+            ui.button('Escenario 6', on_click=lambda: show_scenario_statistics('Scenario05.txt')).classes(button_class)
+            ui.button('Escenario 7', on_click=lambda: show_scenario_statistics('Scenario06.txt')).classes(button_class)
+            ui.button('Escenario 8', on_click=lambda: show_scenario_statistics('Scenario07.txt')).classes(button_class)
+            ui.button('Escenario 9', on_click=lambda: show_scenario_statistics('Scenario08.txt')).classes(button_class)
+            ui.button('Escenario 10', on_click=lambda: show_scenario_statistics('Scenario09.txt')).classes(button_class)
             
     with ui.footer().classes('flex justify-end items-end text-end text-xs mt-5 bg-transparent text-white font-bold'):
         ui.label('© Minero Pro')
