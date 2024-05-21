@@ -1,20 +1,13 @@
 import matplotlib.pyplot as plt
-import pandas as pd
+from utils.global_functions import read_coordinates
 import re
 
 file_name_main = ''
 
-
-def read_coordinates(filename):
-    df = pd.read_csv(f'data/scenarios/{filename}', header=None,
-                     names=["x", "y", "z", "tonelaje_total", "tonelaje_oro", "tonelaje_otro"])
-    return df
-
-
 def show_histogram(scenario_df, file_number):
-    scenario_df['ley_metal_oro'] = scenario_df['tonelaje_oro'] / scenario_df['tonelaje_total']
+    scenario_df['metal_law_gold'] = scenario_df['gold_tonn'] / scenario_df['total_tonn']
     plt.subplot(2, 1, 1)
-    plt.hist(scenario_df['ley_metal_oro'], bins=10, edgecolor='black')
+    plt.hist(scenario_df['metal_law_gold'], bins=10, edgecolor='black')
     plt.title(f'Histograma de Leyes de Metal: Escenario {file_number}')
     plt.xlabel('Ley de metal')
     plt.ylabel('Frecuencia')
@@ -22,10 +15,10 @@ def show_histogram(scenario_df, file_number):
 
 
 def show_curve(scenario_df, file_number):
-    scenario_df = scenario_df.sort_values(by='ley_metal_oro', ascending=False)
+    scenario_df = scenario_df.sort_values(by='metal_law_gold', ascending=False)
     scenario_df = scenario_df.reset_index(drop=True)
     plt.subplot(2, 1, 2)
-    plt.plot(scenario_df.index, scenario_df['ley_metal_oro'])
+    plt.plot(scenario_df.index, scenario_df['metal_law_gold'])
     plt.title(f'Curva de Tonelaje vs Ley de Metal: Escenario {file_number}')
     plt.ylabel('Ley de metal')
     plt.grid(True)
