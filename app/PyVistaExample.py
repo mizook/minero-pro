@@ -1,13 +1,32 @@
 import pandas as pd
 import pyvista as pv
+import os
+import sys
+
 
 def read_coordinates(filename):
-    df = pd.read_csv(filename, header=None, names=["X", "Y", "Z", "Tonelaje", "Metal", "Metal2"])
+    df = pd.read_csv(
+        filename, header=None, names=["X", "Y", "Z", "Tonelaje", "Metal", "Metal2"]
+    )
     return df
 
-def open_scenary(file_name):
+
+def get_resource_path(relative_path):
+    """Get the absolute path to the resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
+def open_scenery(file_name):
     # Lee las coordenadas del archivo
-    coordinates_df = read_coordinates("data/scenarios/Scenario09.txt")
+    # path = get_resource_path(f"data/scenarios/{file_name}")
+    path = get_resource_path("data/scenarios/Scenario09.txt")
+    coordinates_df = read_coordinates(path)
 
     # Crea un contenedor para todos los cubos
     grid = pv.MultiBlock()
@@ -28,5 +47,6 @@ def open_scenary(file_name):
     plotter.add_mesh(grid, color="orange", show_edges=True)
     plotter.show()
 
+
 if __name__ == "__main__":
-    open_scenary('Scenario00.txt')
+    open_scenary("Scenario00.txt")

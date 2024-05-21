@@ -1,7 +1,10 @@
 from nicegui import ui
 
+from routes.footer import get_footer
+
 button_class = 'text-xl font-bold w-[300px] lg:w-[500px] mt-5 bg-yellow-8 text-black'
 title_class = 'text-4xl font-bold text-center mt-2'
+
 
 @ui.page('/', title="Minero Pro | Inicio", favicon="assets/minero-pro.svg", dark=True)
 def home_page():
@@ -16,12 +19,4 @@ def home_page():
             ui.button('Estadísticas', on_click=lambda: ui.navigate.to('/estadisticas')).classes(button_class)
             ui.button('Cálculos', on_click=lambda: ui.navigate.to('/calculos')).classes(button_class)
 
-    with ui.footer().classes('flex justify-end items-end text-end text-xs mt-5 bg-transparent text-white font-bold'):
-        ui.label('© Minero Pro')
-        ui.label('|')
-        ui.image('assets/github-icon.svg').classes('w-[16px] h-[16px] hover:opacity-80 cursor-pointer')
-        ui.label('|')
-        ui.link('David Araya', 'https://github.com/Dizkm8')
-        ui.link('Marcelo Céspedes', 'https://github.com/ZenkaiRed')
-        ui.link('Carlo Ramírez', 'https://github.com/mizook')
-        ui.link('Pablo Robledo', 'https://github.com/Pablo-RoVi')
+    get_footer()
