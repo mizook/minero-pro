@@ -40,7 +40,3 @@ def show_scenario_statistics(file_name):
     show_curve(coordinates_df, file_number)
     plt.tight_layout()
     plt.show()
-
-
-if __name__ == "__main__":
-    show_scenario_statistics(file_name_main)

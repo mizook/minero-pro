@@ -34,7 +34,3 @@ def open_scenery(file_name):
     plotter = pv.Plotter()
     plotter.add_mesh(grid, color="orange", show_edges=True)
     plotter.show()
-
-
-if __name__ == "__main__":
-    open_scenary("Scenario00.txt")
