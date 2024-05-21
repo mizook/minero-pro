@@ -9,13 +9,13 @@
 
 1. crear un ambiente virtual, usando el comando:
     ```bash
-        python -m venv env
+        python -m venv venv
     ```
 
 2. activar el ambiente virtual utilizando:
     ```bash
-        env\Scripts\activate # En Windows
-        source env/bin/activate # En Linux o MacOS
+        venv\Scripts\activate # En Windows
+        source venv/bin/activate # En Linux o MacOS
     ```
 
 3. instalar las dependencias del proyecto con:
@@ -29,3 +29,14 @@
     ```
 
 5. La aplicación deberá desplegar una GUI.
+
+## Construcción de la aplicación
+
+Para construir la aplicación, se debe ejecutar el siguiente comando:
+
+```bash
+    nicegui-pack  --add-data "assets;assets" --add-data "data;data"  --name "minero-pro" --windowed main.py
+```
+
+Generará un archivo ejecutable en la carpeta `dist` con el nombre `minero-pro`. Al ejecutarlo, se desplegará la GUI de
+la aplicación.
