@@ -1,6 +1,6 @@
 from nicegui import ui
 from app.Statistics import show_scenario_statistics
-from routes.constants import statistics_path, home_path
+from routes.constants import statistics_path
 from routes.footer import get_footer
 from routes.go_back_button import get_go_back_button
 from utils.utils import Utils as utl
