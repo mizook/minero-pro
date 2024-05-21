@@ -14,4 +14,4 @@ def run_app():
     for page in pages_to_run:
         page()
 
-    ui.run(reload=False, port=native.find_open_port())
+    ui.run(reload=False, native=True)

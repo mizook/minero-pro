@@ -7,3 +7,4 @@ if __name__ in {"__main__", "__mp_main__"}:
     except Exception as e:
         print(f"Error: {e}")
         print("App crashed.")
+        input("Press Enter to exit.")
