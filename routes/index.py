@@ -1,16 +1,17 @@
-from nicegui import ui
-from routes.pages import home, yacimiento_minero, plan_minero, estadisticas, calculos
+from nicegui import native, ui
+from routes.pages import home, yacimiento_minero, plan_minero, statistics, calculos
 
 pages_to_run = [
     home.home_page,
     yacimiento_minero.yacimiento_minero_page,
     plan_minero.plan_minero_page,
-    estadisticas.estadisticas_page,
+    statistics.statistics_page,
     calculos.calculos_page
 ]
+
 
 def run_app():
     for page in pages_to_run:
         page()
-    
-    ui.run()
+
+    ui.run(reload=False, port=native.find_open_port())
