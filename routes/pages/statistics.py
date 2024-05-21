@@ -1,15 +1,17 @@
 from nicegui import ui
 from app.Statistics import show_scenario_statistics
+from routes.constants import statistics_path, home_path
 from routes.footer import get_footer
+from routes.go_back_button import get_go_back_button
 from utils.utils import Utils as utl
 
 button_class = 'text-xl font-bold w-[300px] lg:w-[500px] mt-5 bg-yellow-8 text-black'
 title_class = 'text-4xl font-bold text-center mt-2'
 
 
-@ui.page('/estadisticas', title="Minero Pro | Estadísticas", favicon=utl.get_app_favicon(), dark=True)
+@ui.page(statistics_path, title="Minero Pro | Estadísticas", favicon=utl.get_app_favicon(), dark=True)
 def statistics_page():
-    ui.link('<- Volver atrás', '/').classes('text-yellow-8')
+    get_go_back_button()
 
     with ui.element('div').classes('grid place-items-center w-full h-[300px]'):
         with ui.element('div').classes('inline-flex'):

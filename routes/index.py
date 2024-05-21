@@ -1,12 +1,12 @@
 from nicegui import native, ui
-from routes.pages import home, yacimiento_minero, plan_minero, statistics, calculos
+from routes.pages import home, mining_deposit, mining_plan, statistics, calculations
 
 pages_to_run = [
     home.home_page,
-    yacimiento_minero.yacimiento_minero_page,
-    plan_minero.plan_minero_page,
+    mining_deposit.mining_deposit_page,
+    mining_plan.mining_plan_page,
     statistics.statistics_page,
-    calculos.calculos_page
+    calculations.calculations_page
 ]
 
 

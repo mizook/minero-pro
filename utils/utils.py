@@ -25,3 +25,4 @@ class Utils:
     @staticmethod
     def get_minero_pro_image():
         return Utils.get_resource_path('assets/minero-pro.svg')
+    

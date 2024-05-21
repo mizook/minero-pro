@@ -1,15 +1,17 @@
 from nicegui import ui
 from app.PyVistaExample import open_scenery
+from routes.constants import mining_deposit_path
 from routes.footer import get_footer
+from routes.go_back_button import get_go_back_button
 from utils.utils import Utils as utl
 
 button_class = 'text-xl font-bold w-[300px] lg:w-[500px] mt-5 bg-yellow-8 text-black'
 title_class = 'text-4xl font-bold text-center mt-2'
 
 
-@ui.page('/yacimiento-minero', title="Minero Pro | Yacimiento Minero", favicon=utl.get_app_favicon(), dark=True)
-def yacimiento_minero_page():
-    ui.link('<- Volver atrás', '/').classes('text-yellow-8')
+@ui.page(mining_deposit_path, title="Minero Pro | Yacimiento Minero", favicon=utl.get_app_favicon(), dark=True)
+def mining_deposit_page():
+    get_go_back_button()
 
     with ui.element('div').classes('grid place-items-center w-full h-[720px]'):
         with ui.element('div').classes('inline-flex'):
