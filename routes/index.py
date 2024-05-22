@@ -14,4 +14,4 @@ def run_app():
     for page in pages_to_run:
         page()
 
-    ui.run(reload=False, native=True)
+    ui.run(title="Minero Pro", window_size=[1080, 720], reload=False, native=True)
