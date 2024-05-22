@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 from utils.global_functions import read_coordinates
 import re
 
-file_name_main = ''
 
 def show_histogram(scenario_df, file_number):
     scenario_df['metal_law_gold'] = scenario_df['gold_tonn'] / scenario_df['total_tonn']
@@ -25,7 +24,6 @@ def show_curve(scenario_df, file_number):
 
 
 def show_scenario_statistics(file_name):
-    file_name_main = file_name
     file_number = int(re.search(r'\d+', file_name).group()) + 1
     coordinates_df = read_coordinates(file_name)
     plt.figure(figsize=(10, 6))
