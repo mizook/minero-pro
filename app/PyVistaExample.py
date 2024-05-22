@@ -1,7 +1,9 @@
 import pandas as pd
 import pyvista as pv
-
+import multiprocessing
 from utils.utils import Utils as utl
+import time
+import pygetwindow as gw
 
 
 def read_coordinates(filename):
@@ -11,7 +13,15 @@ def read_coordinates(filename):
     return df
 
 
-def open_scenery(file_name):
+def bring_window_to_front(window_title):
+    time.sleep(2)  # Wait for the window to be created
+    windows = gw.getWindowsWithTitle(window_title)
+    if windows:
+        window = windows[0]
+        window.activate()
+
+
+def pyvista_rendering(file_name: str, title: str):
     # Lee las coordenadas del archivo
     path = utl.get_resource_path(f"data/scenarios/{file_name}")
     coordinates_df = read_coordinates(path)
@@ -33,4 +43,19 @@ def open_scenery(file_name):
     # Visualiza los cubos
     plotter = pv.Plotter()
     plotter.add_mesh(grid, color="orange", show_edges=True)
+    plotter.show_axes()
+
+    plotter.title = title
+
+    # Start a new thread to bring the window to the front
+    import threading
+    thread = threading.Thread(target=bring_window_to_front, args=(title,))
+    thread.start()
+
     plotter.show()
+
+
+def open_scenery(file_name: str, title: str):
+    # Create and start a new process for PyVista rendering
+    process = multiprocessing.Process(target=pyvista_rendering, args=(file_name, title))
+    process.start()

@@ -19,15 +19,25 @@ def mining_deposit_page():
             ui.image(utl.get_minero_pro_image()).classes('ml-5 w-[42px] h-[42px]')
 
         with ui.list().classes('grid place-items-center mt-10'):
-            ui.button('Visualizar Escenario 1', on_click=lambda: open_scenery('Scenario00.txt')).classes(button_class)
-            ui.button('Visualizar Escenario 2', on_click=lambda: open_scenery('Scenario01.txt')).classes(button_class)
-            ui.button('Visualizar Escenario 3', on_click=lambda: open_scenery('Scenario02.txt')).classes(button_class)
-            ui.button('Visualizar Escenario 4', on_click=lambda: open_scenery('Scenario03.txt')).classes(button_class)
-            ui.button('Visualizar Escenario 5', on_click=lambda: open_scenery('Scenario04.txt')).classes(button_class)
-            ui.button('Visualizar Escenario 6', on_click=lambda: open_scenery('Scenario05.txt')).classes(button_class)
-            ui.button('Visualizar Escenario 7', on_click=lambda: open_scenery('Scenario06.txt')).classes(button_class)
-            ui.button('Visualizar Escenario 8', on_click=lambda: open_scenery('Scenario07.txt')).classes(button_class)
-            ui.button('Visualizar Escenario 9', on_click=lambda: open_scenery('Scenario08.txt')).classes(button_class)
-            ui.button('Visualizar Escenario 10', on_click=lambda: open_scenery('Scenario09.txt')).classes(button_class)
+            ui.button('Visualizar Escenario 1', on_click=lambda: open_scenery('Scenario00.txt', "Escenario 1")).classes(
+                button_class)
+            ui.button('Visualizar Escenario 2', on_click=lambda: open_scenery('Scenario01.txt', "Escenario 2")).classes(
+                button_class)
+            ui.button('Visualizar Escenario 3', on_click=lambda: open_scenery('Scenario02.txt', "Escenario 3")).classes(
+                button_class)
+            ui.button('Visualizar Escenario 4', on_click=lambda: open_scenery('Scenario03.txt', "Escenario 4")).classes(
+                button_class)
+            ui.button('Visualizar Escenario 5', on_click=lambda: open_scenery('Scenario04.txt', "Escenario 5")).classes(
+                button_class)
+            ui.button('Visualizar Escenario 6', on_click=lambda: open_scenery('Scenario05.txt', "Escenario 6")).classes(
+                button_class)
+            ui.button('Visualizar Escenario 7', on_click=lambda: open_scenery('Scenario06.txt', "Escenario 7")).classes(
+                button_class)
+            ui.button('Visualizar Escenario 8', on_click=lambda: open_scenery('Scenario07.txt', "Escenario 8")).classes(
+                button_class)
+            ui.button('Visualizar Escenario 9', on_click=lambda: open_scenery('Scenario08.txt', "Escenario 9")).classes(
+                button_class)
+            ui.button('Visualizar Escenario 10',
+                      on_click=lambda: open_scenery('Scenario09.txt', "Escenario 10")).classes(button_class)
 
     get_footer()
