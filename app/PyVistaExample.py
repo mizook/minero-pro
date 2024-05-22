@@ -21,7 +21,7 @@ def bring_window_to_front(window_title):
         window.activate()
 
 
-def pyvista_rendering(file_name: str, title: str):
+def pyvista_rendering(file_name: str, title: str, event):
     # Lee las coordenadas del archivo
     path = utl.get_resource_path(f"data/scenarios/{file_name}")
     coordinates_df = read_coordinates(path)
@@ -52,10 +52,14 @@ def pyvista_rendering(file_name: str, title: str):
     thread = threading.Thread(target=bring_window_to_front, args=(title,))
     thread.start()
 
-    plotter.show()
+    plotter.show(auto_close=False)  # Ensure the plotter stays open
+
+    event.set()  # Señala que la ventana está lista
+
+    plotter.app.exec_()  # Run the PyVista application
 
 
-def open_scenery(file_name: str, title: str):
+def open_scenery(file_name: str, title: str, event):
     # Create and start a new process for PyVista rendering
-    process = multiprocessing.Process(target=pyvista_rendering, args=(file_name, title))
+    process = multiprocessing.Process(target=pyvista_rendering, args=(file_name, title, event))
     process.start()

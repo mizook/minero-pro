@@ -13,3 +13,4 @@ def get_footer():
         ui.link('Marcelo Céspedes', 'https://github.com/ZenkaiRed', new_tab=True)
         ui.link('Carlo Ramírez', 'https://github.com/mizook', new_tab=True)
         ui.link('Pablo Robledo', 'https://github.com/Pablo-RoVi', new_tab=True)
+        ui.link('Darío Contreras', 'https://github.com/Dariusss12', new_tab=True)
