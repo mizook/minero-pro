@@ -56,7 +56,7 @@ def show_scenario_statistics(file_name):
     coordinates_df = read_coordinates(file_name)
     
      # Crea una figura con dos subplots
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 12))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6), constrained_layout=True)
     
     # Muestra el histograma
     show_histogram(ax1, coordinates_df, file_number)
