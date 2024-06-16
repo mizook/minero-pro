@@ -52,11 +52,11 @@ def pyvista_rendering(file_name: str, title: str, event):
     thread = threading.Thread(target=bring_window_to_front, args=(title,))
     thread.start()
 
-    plotter.show(auto_close=False)  # Ensure the plotter stays open
+    plotter.show()  # Ensure the plotter stays open
 
     event.set()  # Señala que la ventana está lista
 
-    plotter.app.exec_()  # Run the PyVista application
+    # plotter.app.exec_()  # Run the PyVista application
 
 
 def open_scenery(file_name: str, title: str, event):
