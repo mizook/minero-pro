@@ -3,32 +3,49 @@ from utils.global_functions import read_coordinates
 import re
 
 # Mostrar histograma
-def show_histogram(scenario_df, file_number):
+def show_histogram(ax, scenario_df, file_number):
     # Calcula la ley de metal de cada cubo
     scenario_df['metal_law_gold'] = scenario_df['gold_tonn'] / scenario_df['total_tonn']
     
     # Crea un histograma
-    plt.subplot(2, 1, 1)
-    plt.hist(scenario_df['metal_law_gold'], bins=10, edgecolor='black')
-    plt.title(f'Histograma de Leyes de Metal: Escenario {file_number}')
-    plt.xlabel('Ley de metal')
-    plt.ylabel('Frecuencia')
-    plt.grid(True)
+    ax.hist(scenario_df['metal_law_gold'], bins=10, edgecolor='black')
+    ax.set_title(f'Histograma de Leyes de Metal: Escenario {file_number}')
+    ax.set_xlabel('Ley de metal')
+    ax.set_ylabel('Frecuencia')
+    ax.grid(True)
 
 # Mostrar curva
-def show_curve(scenario_df, file_number):
+def show_curve(ax, scenario_df, file_number):
     # Ordena el DataFrame por ley de metal
     scenario_df = scenario_df.sort_values(by='metal_law_gold', ascending=False)
+    
+    # Calcula el tonelaje acumulado y la ley media
+    scenario_df['cumulative_tonn'] = scenario_df['total_tonn'].cumsum()
+    scenario_df['average_metal_law'] = scenario_df['gold_tonn'].cumsum() / scenario_df['cumulative_tonn']
     
     # Reinicia los índices
     scenario_df = scenario_df.reset_index(drop=True)
     
-    # Crea una curva de ley de metal
-    plt.subplot(2, 1, 2)
-    plt.plot(scenario_df.index, scenario_df['metal_law_gold'])
-    plt.title(f'Curva de Tonelaje vs Ley de Metal: Escenario {file_number}')
-    plt.ylabel('Ley de metal')
-    plt.grid(True)
+    # Primer eje Y (izquierdo) - Tonelaje acumulado
+    ax.plot(scenario_df['metal_law_gold'], scenario_df['cumulative_tonn'], 'b-', label='Tonelaje acumulado')
+    ax.set_xlabel('Ley de corte de oro')
+    ax.set_ylabel('Tonelaje acumulado', color='b')
+    ax.tick_params(axis='y', labelcolor='b')
+    ax.grid(True)
+    
+    # Segundo eje Y (derecho) - Ley media
+    ax2 = ax.twinx()
+    ax2.plot(scenario_df['metal_law_gold'], scenario_df['average_metal_law'], 'r-', label='Ley media')
+    ax2.set_ylabel('Ley media', color='r')
+    ax2.tick_params(axis='y', labelcolor='r')
+
+    # Combina las leyendas de ambos ejes
+    lines, labels = ax.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax.legend(lines + lines2, labels + labels2, loc='best')
+    
+    ax.set_title(f'Curva de Tonelaje-Ley: Escenario {file_number}')
+    ax.grid(True)
 
 # Mostrar estadísticas de un escenario
 def show_scenario_statistics(file_name):
@@ -38,15 +55,17 @@ def show_scenario_statistics(file_name):
     # Lee las coordenadas del archivo
     coordinates_df = read_coordinates(file_name)
     
-    # Crea una figura
-    plt.figure(figsize=(10, 6))
+     # Crea una figura con dos subplots
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 12))
     
-    # Muestra el histograma y la curva
-    show_histogram(coordinates_df, file_number)
-    show_curve(coordinates_df, file_number)
+    # Muestra el histograma
+    show_histogram(ax1, coordinates_df, file_number)
+    
+    # Muestra la curva
+    show_curve(ax2, coordinates_df, file_number)
     
     # Ajusta el diseño
-    plt.tight_layout()
+    fig.tight_layout()
     
     # Muestra la figura
     plt.show()
