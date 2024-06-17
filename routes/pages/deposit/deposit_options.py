@@ -20,12 +20,12 @@ async def handle_button_click(button, file_name, title):
     button.props(remove='loading')
 
 
-def create_button(scenario_num):
-    file_name = f'Scenario0{scenario_num - 1}.txt'
+def create_button(button_title: str, scenario_num: str):
+    file_name = f'Scenario0{scenario_num}.txt'
     title = f'Escenario {scenario_num}'
-    button = ui.button(f'Visualizar Escenario {scenario_num}')
+    button = ui.button(button_title)
     button.on('click', lambda _: asyncio.create_task(handle_button_click(button, file_name, title)))
-    button.classes(UICommons.statistics_button_class)
+    button.classes(UICommons.button_class)
     return button
 
 
@@ -38,7 +38,9 @@ def deposit_options_page(scenery_index: str = "1"):
             ui.image(utl.get_minero_pro_image()).classes('ml-5 w-[42px] h-[42px]')
 
         with ui.list().classes('grid place-items-center w-full h-full'):
-            ui.button('BOTÓN DE PRUEBA', on_click=lambda: ui.navigate.to("/")).classes(
-                UICommons.button_class)
+            create_button("Visualización 3D", scenery_index)
+            create_button("Visualización 2D - Eje X", scenery_index)
+            create_button("Visualización 2D - Eje Y", scenery_index)
+            create_button("Visualización 2D - Eje Z", scenery_index)
 
     get_footer()

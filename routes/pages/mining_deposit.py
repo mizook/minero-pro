@@ -9,7 +9,7 @@ from utils.ui_commons import UICommons
 def create_button(scenario_num):
     return ui.button(f"Escenario {scenario_num}",
                      on_click=lambda: ui.navigate.to(deposit_options(scenario_num))).classes(
-        UICommons.button_class)
+        UICommons.statistics_button_class)
 
 
 @ui.page(mining_deposit_path, title="Minero Pro | Yacimiento Minero", favicon=utl.get_app_favicon(), dark=True)
