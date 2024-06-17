@@ -6,9 +6,7 @@ from routes.go_back_button import get_go_back_button
 from utils.utils import Utils as utl
 import asyncio
 import multiprocessing
-
-button_class = 'text-xl font-bold w-[300px] mt-5 bg-yellow-8 text-black'
-title_class = 'text-4xl font-bold text-center mt-2'
+from utils.ui_commons import UICommons
 
 
 async def handle_button_click(button, file_name, title):
@@ -27,7 +25,7 @@ def create_button(scenario_num):
     title = f'Escenario {scenario_num}'
     button = ui.button(f'Visualizar Escenario {scenario_num}')
     button.on('click', lambda _: asyncio.create_task(handle_button_click(button, file_name, title)))
-    button.classes(button_class)
+    button.classes(UICommons.statistics_button_class)
     return button
 
 
@@ -37,7 +35,7 @@ def mining_deposit_page():
 
     with ui.element('div').classes('grid place-items-center w-full h-[500px]'):
         with ui.element('div').classes('inline-flex'):
-            ui.label('¡Yacimiento Minero!').classes(title_class)
+            ui.label('¡Yacimiento Minero!').classes(UICommons.title_class)
             ui.image(utl.get_minero_pro_image()).classes('ml-5 w-[42px] h-[42px]')
 
         with ui.list().classes('grid place-items-center grid-cols-2 gap-x-5 mt-10'):
