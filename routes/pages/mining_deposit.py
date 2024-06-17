@@ -1,5 +1,5 @@
 from nicegui import ui
-from routes.constants import mining_deposit_path
+from routes.constants import mining_deposit_path, deposit_options
 from routes.footer import get_footer
 from routes.go_back_button import get_go_back_button
 from utils.utils import Utils as utl
@@ -7,8 +7,8 @@ from utils.ui_commons import UICommons
 
 
 def create_button(scenario_num):
-    return ui.button(f'Escenario {scenario_num}',
-                     on_click=lambda: ui.navigate.to(f"/scenery/{scenario_num}")).classes(
+    return ui.button(f"Escenario {scenario_num}",
+                     on_click=lambda: ui.navigate.to(deposit_options(scenario_num))).classes(
         UICommons.button_class)
 
 

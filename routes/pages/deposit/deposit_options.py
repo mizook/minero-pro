@@ -1,5 +1,6 @@
 from nicegui import ui
 
+from routes.constants import mining_deposit_path, deposit_path
 from routes.footer import get_footer
 from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
@@ -28,8 +29,9 @@ def create_button(scenario_num):
     return button
 
 
-@ui.page("/scenery/{scenery_index}", title="Minero Pro | AAA", favicon=utl.get_app_favicon(), dark=True)
+@ui.page(f"{deposit_path}/{{scenery_index}}", title="Minero Pro | AAA", favicon=utl.get_app_favicon(), dark=True)
 def deposit_options_page(scenery_index: str = "1"):
+    ui.link('<- Volver atrás', mining_deposit_path).classes('text-yellow-8')
     with ui.element('div').classes('grid place-items-center w-full h-[550px]'):
         with ui.element('div').classes('inline-flex'):
             ui.label(f'Scenario {scenery_index}').classes(UICommons.title_class)
