@@ -1,5 +1,6 @@
 import os
 import sys
+
 import pandas as pd
 
 
@@ -17,15 +18,15 @@ class Utils:
 
     @staticmethod
     def get_app_favicon():
-        return Utils.get_resource_path('assets/minero-pro.svg')
+        return Utils.get_resource_path("assets/minero-pro.svg")
 
     @staticmethod
     def get_github_icon():
-        return Utils.get_resource_path('assets/github-icon.svg')
+        return Utils.get_resource_path("assets/github-icon.svg")
 
     @staticmethod
     def get_minero_pro_image():
-        return Utils.get_resource_path('assets/minero-pro.svg')
+        return Utils.get_resource_path("assets/minero-pro.svg")
 
     @staticmethod
     def read_coordinates(filename):
