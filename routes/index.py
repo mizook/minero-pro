@@ -1,4 +1,4 @@
-from nicegui import native, ui
+from nicegui import ui
 from routes.pages import home, mining_deposit, mining_plan, statistics, calculations
 
 pages_to_run = [
@@ -14,4 +14,4 @@ def run_app():
     for page in pages_to_run:
         page()
 
-    ui.run(title="Minero Pro", window_size=[1080, 720], reload=False, native=True)
+    ui.run(title="Minero Pro", window_size=(1080, 720), reload=False, native=True)
