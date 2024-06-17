@@ -1,9 +1,10 @@
-import pyvista as pv
 import multiprocessing
+import threading
+
+import pyvista as pv
 
 from app.plot_common import PlotCommon
 from utils.utils import Utils as utl
-import threading
 
 
 def abstract_rendering(file_name: str):
@@ -18,7 +19,9 @@ def abstract_rendering(file_name: str):
 
 def rendering_2d(file_name: str, title: str, axis_view: str, event):
     grid, plotter = abstract_rendering(file_name)
-    plotter.add_mesh(grid, color="orange", show_edges=True, pickable=False, label="XY View")
+    plotter.add_mesh(
+        grid, color="orange", show_edges=True, pickable=False, label="Vista 2D"
+    )
     plotter.show_axes()
 
     if axis_view == "X":
@@ -41,7 +44,9 @@ def rendering_2d(file_name: str, title: str, axis_view: str, event):
 
 
 def open_2d_scenery(file_name: str, title: str, axis_view: str, event):
-    process = multiprocessing.Process(target=rendering_2d, args=(file_name, title, axis_view, event))
+    process = multiprocessing.Process(
+        target=rendering_2d, args=(file_name, title, axis_view, event)
+    )
     process.start()
 
 
@@ -61,5 +66,7 @@ def rendering_3d(file_name: str, title: str, event):
 
 
 def open_3d_scenery(file_name: str, title: str, event):
-    process = multiprocessing.Process(target=rendering_3d, args=(file_name, title, event))
+    process = multiprocessing.Process(
+        target=rendering_3d, args=(file_name, title, event)
+    )
     process.start()
