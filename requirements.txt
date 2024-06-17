@@ -46,10 +46,12 @@ pscript==0.7.7
 pycparser==2.22
 pydantic==2.7.1
 pydantic_core==2.18.2
+PyGetWindow==0.0.9
 Pygments==2.18.0
 pyinstaller==6.6.0
 pyinstaller-hooks-contrib==2024.6
 pyparsing==3.1.2
+PyRect==0.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-engineio==4.9.1
@@ -62,6 +64,7 @@ pywebview==5.1
 pywin32-ctypes==0.2.2
 PyYAML==6.0.1
 requests==2.31.0
+ruff==0.4.9
 scooby==0.10.0
 simple-websocket==1.0.0
 six==1.16.0
@@ -77,5 +80,3 @@ watchfiles==0.21.0
 websockets==12.0
 wsproto==1.2.0
 yarl==1.9.4
-
-PyGetWindow~=0.0.9
