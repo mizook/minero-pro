@@ -29,10 +29,10 @@ def create_button(scenario_num):
 
 
 @ui.page("/scenery/{scenery_index}", title="Minero Pro | AAA", favicon=utl.get_app_favicon(), dark=True)
-def deposit_options_page():
+def deposit_options_page(scenery_index: str = "1"):
     with ui.element('div').classes('grid place-items-center w-full h-[550px]'):
         with ui.element('div').classes('inline-flex'):
-            ui.label('¡Bienvenido a Minero Pro!').classes(UICommons.title_class)
+            ui.label(f'Scenario {scenery_index}').classes(UICommons.title_class)
             ui.image(utl.get_minero_pro_image()).classes('ml-5 w-[42px] h-[42px]')
 
         with ui.list().classes('grid place-items-center w-full h-full'):
