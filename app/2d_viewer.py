@@ -1,8 +1,9 @@
 import pyvista as pv
 import multiprocessing
+
+from app.plot_common import PlotCommon
 from utils.utils import Utils as utl
 import threading
-from app.plot_common import PlotCommon
 
 
 def pyvista_rendering(file_name: str, title: str, event):
@@ -12,15 +13,17 @@ def pyvista_rendering(file_name: str, title: str, event):
     grid = PlotCommon.get_deposit_grid(coordinates_df)
 
     plotter = pv.Plotter()
-    plotter.add_mesh(grid, color="orange", show_edges=True)
+    plotter.add_mesh(grid, color="orange", show_edges=True, pickable=False, label="XY View")
     plotter.show_axes()
 
-    plotter.title = title
+    plotter.view_xy()
+    plotter.disable()
 
     thread = threading.Thread(target=PlotCommon.bring_window_to_front, args=(title,))
     thread.start()
 
     plotter.show()
+
     event.set()
 
 
