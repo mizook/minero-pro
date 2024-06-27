@@ -1,5 +1,6 @@
 from nicegui import ui
-from routes.pages import home, mining_deposit, mining_plan, statistics, calculations
+
+from routes.pages import calculations, home, mining_deposit, mining_plan, statistics
 from routes.pages.deposit import deposit_options
 
 pages_to_run = [
@@ -8,7 +9,7 @@ pages_to_run = [
     mining_plan.mining_plan_page,
     statistics.statistics_page,
     calculations.calculations_page,
-    deposit_options.deposit_options_page
+    deposit_options.deposit_options_page,
 ]
 
 

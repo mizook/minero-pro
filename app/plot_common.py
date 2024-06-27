@@ -1,6 +1,7 @@
-import pyvista as pv
 import time
+
 import pygetwindow as gw
+import pyvista as pv
 
 
 class PlotCommon:

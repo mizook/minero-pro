@@ -6,4 +6,5 @@ home_path = "/"
 deposit_path = "/scenery"
 
 
-def deposit_options(scenery_index): return f"{deposit_path}/{scenery_index}"
+def deposit_options(scenery_index):
+    return f"{deposit_path}/{scenery_index}"
