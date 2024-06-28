@@ -43,12 +43,14 @@ def rendering_2d(file_name: str, title: str, axis_view: str, event):
     event.set()
 
 
-def rendering_slice_2d(
-    file_name: str, title: str, axis_view: str, event, slice_x: float = None
-):
-    grid, plotter = abstract_rendering(file_name)
+def rendering_slice_2d(file_name: str, title: str, axis: str, cord: int, event):
+    print(axis, cord)
+    lower_axis = axis.lower()
+    if lower_axis not in ["x", "y", "z"]:
+        raise ValueError("Expected axis value is x,y or z")
 
-    sliced_mesh = grid.slice(normal="x")
+    grid, plotter = abstract_rendering(file_name)
+    sliced_mesh = grid.slice(normal=lower_axis)
 
     plotter.add_mesh(sliced_mesh, color="orange", show_edges=True)
     plotter.show_axes()
@@ -62,9 +64,9 @@ def rendering_slice_2d(
     event.set()
 
 
-def open_2d_scenery(file_name: str, title: str, axis_view: str, event):
+def open_2d_scenery(file_name: str, title: str, axis: str, cord: int, event):
     process = multiprocessing.Process(
-        target=rendering_slice_2d, args=(file_name, title, axis_view, event, 10)
+        target=rendering_slice_2d, args=(file_name, title, axis, cord, event)
     )
     process.start()
 
