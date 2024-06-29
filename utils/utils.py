@@ -34,3 +34,9 @@ class Utils:
             filename, header=None, names=["X", "Y", "Z", "Tonelaje", "Metal", "Metal2"]
         )
         return df
+    
+    @staticmethod
+    def get_mineplan(filename):
+        df = pd.read_csv(filename, sep=";")
+        df.columns = ["Period", "XIndex", "YIndex", "ZIndex"]
+        return df
