@@ -19,9 +19,7 @@ def abstract_rendering(file_name: str):
 
 def rendering_2d(file_name: str, title: str, axis_view: str, event):
     grid, plotter = abstract_rendering(file_name)
-    plotter.add_mesh(
-        grid, color="orange", show_edges=True, pickable=False, label="Vista 2D"
-    )
+    plotter.add_mesh(grid, show_edges=True, pickable=False, label="Vista 2D")
     plotter.show_axes()
 
     if axis_view == "X":
@@ -52,7 +50,7 @@ def rendering_slice_2d(file_name: str, title: str, axis: str, cord: int, event):
     grid, plotter = abstract_rendering(file_name)
     sliced_mesh = grid.slice(normal=lower_axis)
 
-    plotter.add_mesh(sliced_mesh, color="orange", show_edges=True)
+    plotter.add_mesh(sliced_mesh, show_edges=True)
     plotter.show_axes()
 
     plotter.title = title
@@ -74,7 +72,7 @@ def open_2d_scenery(file_name: str, title: str, axis: str, cord: int, event):
 def rendering_3d(file_name: str, title: str, event):
     grid, plotter = abstract_rendering(file_name)
 
-    plotter.add_mesh(grid, color="orange", show_edges=True)
+    plotter.add_mesh(grid, show_edges=True)
     plotter.show_axes()
 
     plotter.title = title
