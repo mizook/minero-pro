@@ -3,15 +3,16 @@ import re
 import matplotlib.pyplot as plt
 
 from utils.global_functions import read_coordinates
+from utils.utils import Utils as utl
 
 
 # Mostrar histograma
 def show_histogram(ax, scenario_df, file_number):
     # Calcular la ley de metal de cada cubo
-    scenario_df["metal_law_gold"] = scenario_df["gold_tonn"] / scenario_df["total_tonn"]
+    scenario_df["LeyMetal"] = scenario_df["Metal"] / scenario_df["Tonelaje"]
 
     # Crear un histograma
-    ax.hist(scenario_df["metal_law_gold"], bins=10, edgecolor="black")
+    ax.hist(scenario_df["LeyMetal"], bins=10, edgecolor="black")
     ax.set_title(f"Histograma de Leyes de Metal: Escenario {file_number}")
     ax.set_xlabel("Ley de metal")
     ax.set_ylabel("Frecuencia")
@@ -21,12 +22,12 @@ def show_histogram(ax, scenario_df, file_number):
 # Mostrar curva
 def show_curve(ax, scenario_df, file_number):
     # Ordenar el DataFrame por ley de metal
-    scenario_df = scenario_df.sort_values(by="metal_law_gold", ascending=False)
+    scenario_df = scenario_df.sort_values(by="LeyMetal", ascending=False)
 
     # Calcular el tonelaje acumulado y la ley media
-    scenario_df["cumulative_tonn"] = scenario_df["total_tonn"].cumsum()
-    scenario_df["average_metal_law"] = (
-        scenario_df["gold_tonn"].cumsum() / scenario_df["cumulative_tonn"]
+    scenario_df["TonelajeAcumulado"] = scenario_df["Tonelaje"].cumsum()
+    scenario_df["LeyMedia"] = (
+        scenario_df["Metal"].cumsum() / scenario_df["TonelajeAcumulado"]
     )
 
     # Reiniciar los índices
@@ -34,8 +35,8 @@ def show_curve(ax, scenario_df, file_number):
 
     # Primer eje Y (izquierdo) - Tonelaje acumulado
     ax.plot(
-        scenario_df["metal_law_gold"],
-        scenario_df["cumulative_tonn"],
+        scenario_df["LeyMetal"],
+        scenario_df["TonelajeAcumulado"],
         "b-",
         label="Tonelaje acumulado",
     )
@@ -47,8 +48,8 @@ def show_curve(ax, scenario_df, file_number):
     # Segundo eje Y (derecho) - Ley media
     ax2 = ax.twinx()
     ax2.plot(
-        scenario_df["metal_law_gold"],
-        scenario_df["average_metal_law"],
+        scenario_df["LeyMetal"],
+        scenario_df["LeyMedia"],
         "r-",
         label="Ley media",
     )
@@ -69,8 +70,11 @@ def show_scenario_statistics(file_name):
     # Obtener el número de escenario
     file_number = int(re.search(r"\d+", file_name).group()) + 1
 
+    # Obtener path del archivo
+    path = utl.get_resource_path(f"data/scenarios/{file_name}")
+
     # Leer las coordenadas del archivo
-    coordinates_df = read_coordinates(file_name)
+    coordinates_df = utl.read_coordinates(path)
 
     # Crear una figura con dos subplots
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6), constrained_layout=True)
