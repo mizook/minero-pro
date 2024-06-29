@@ -7,6 +7,11 @@ from routes.go_back_button import get_go_back_button
 from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
 
+def create_button(scenario_num):
+    return ui.button(
+        f"Escenario {scenario_num+1}",
+        on_click=lambda: ui.navigate.to(show_scenario_statistics(f"Scenario0{scenario_num}.txt")),
+    ).classes(UICommons.statistics_button_class)
 
 @ui.page(
     statistics_path,
@@ -23,45 +28,7 @@ def statistics_page():
             ui.image(utl.get_minero_pro_image()).classes("ml-5 w-[42px] h-[42px]")
 
         with ui.list().classes("grid place-items-center grid-cols-2 gap-x-5 mt-10"):
-            ui.button(
-                "Escenario 1",
-                on_click=lambda: show_scenario_statistics("Scenario00.txt"),
-            ).classes(UICommons.statistics_button_class)
-            ui.button(
-                "Escenario 2",
-                on_click=lambda: show_scenario_statistics("Scenario01.txt"),
-            ).classes(UICommons.statistics_button_class)
-            ui.button(
-                "Escenario 3",
-                on_click=lambda: show_scenario_statistics("Scenario02.txt"),
-            ).classes(UICommons.statistics_button_class)
-            ui.button(
-                "Escenario 4",
-                on_click=lambda: show_scenario_statistics("Scenario03.txt"),
-            ).classes(UICommons.statistics_button_class)
-            ui.button(
-                "Escenario 5",
-                on_click=lambda: show_scenario_statistics("Scenario04.txt"),
-            ).classes(UICommons.statistics_button_class)
-            ui.button(
-                "Escenario 6",
-                on_click=lambda: show_scenario_statistics("Scenario05.txt"),
-            ).classes(UICommons.statistics_button_class)
-            ui.button(
-                "Escenario 7",
-                on_click=lambda: show_scenario_statistics("Scenario06.txt"),
-            ).classes(UICommons.statistics_button_class)
-            ui.button(
-                "Escenario 8",
-                on_click=lambda: show_scenario_statistics("Scenario07.txt"),
-            ).classes(UICommons.statistics_button_class)
-            ui.button(
-                "Escenario 9",
-                on_click=lambda: show_scenario_statistics("Scenario08.txt"),
-            ).classes(UICommons.statistics_button_class)
-            ui.button(
-                "Escenario 10",
-                on_click=lambda: show_scenario_statistics("Scenario09.txt"),
-            ).classes(UICommons.statistics_button_class)
+            for index in range(10):
+                create_button(index)
 
     get_footer()
