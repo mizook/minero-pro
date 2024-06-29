@@ -42,7 +42,6 @@ def rendering_2d(file_name: str, title: str, axis_view: str, event):
 
 
 def rendering_slice_2d(file_name: str, title: str, axis: str, cord: int, event):
-    print(axis, cord)
     lower_axis = axis.lower()
     if lower_axis not in ["x", "y", "z"]:
         raise ValueError("Expected axis value is x,y or z")
