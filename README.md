@@ -2,14 +2,14 @@
 
 ## Prerequisitos
 
-- [Python 3.12](https://www.python.org/downloads/release/python-3123/), puedes verificar tu versión ejecutando el
+- [Python 3.11](https://www.python.org/downloads/release/python-3119/), puedes verificar tu versión ejecutando el
   comando `python --version`.
 
 ## Instalación
 
 1. crear un ambiente virtual, usando el comando:
     ```bash
-        python -m venv venv
+        python3.11 -m venv venv # Asegurar usar 3.11
     ```
 
 2. activar el ambiente virtual utilizando:
