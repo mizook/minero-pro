@@ -1,8 +1,5 @@
 import re
-
 import matplotlib.pyplot as plt
-
-from utils.global_functions import read_coordinates
 from utils.utils import Utils as utl
 
 
