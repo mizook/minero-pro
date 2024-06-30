@@ -1,3 +1,5 @@
+import asyncio
+
 from nicegui import ui
 
 from app.amount_rock import calculate_amount_rock
@@ -8,6 +10,23 @@ from utils.utils import Utils as utl
 
 # Variables globales
 period_value = 0
+
+async def handle_button_click(button, file_name, period):
+    button.props("loading")
+    calculate_amount_rock(file_name, period)
+    button.props(remove="loading")
+
+def create_button(button_title, scenario_num):
+    file_name = f"Scenario0{scenario_num}.txt"
+    button = ui.button(button_title)
+    button.on(
+        "click",
+        lambda _: asyncio.create_task(
+            handle_button_click(button, file_name, period_value)
+        ),
+    )
+    button.classes(UICommons.statistics_button_class)
+    return button
 
 # Validar que el valor ingresado sea un número entero
 def validate_integer_value(value: str) -> str | None:
@@ -67,9 +86,9 @@ def calculation_options_page(scenery_index: str = "1"):
             ).classes("w-full").on_value_change(callback=on_input_value_change)
             
             # Crear botón para calcular la cantidad de roca en un periodo
-            ui.button(
-                "Calcular", 
-                on_click=lambda: ui.navigate.to(calculate_amount_rock(f"Scenario0{scenery_index}.txt", period_value)),
-            ).classes(UICommons.statistics_button_class)
+            create_button(
+                "Calcular",
+                int(scenery_index),
+            )
 
     get_footer()
