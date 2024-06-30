@@ -23,12 +23,12 @@ async def handle_button_click(button, file_name, period, is_upl):
     else:
         # Validar que el periodo sea un número entero
         try:
-            int(period)
+            period = int(period)
         except ValueError:
             button.props(remove="loading")
             return
-        # Calcular cantidad de roca en un periodo
-        calculate_amount_rock(file_name, period)
+        # Calcular cantidad de roca en un periodo si el periodo se encuentra en el rango
+        if period in range(0,6): calculate_amount_rock(file_name, period)
     # Remover el estado de carga del botón
     button.props(remove="loading")
 

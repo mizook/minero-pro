@@ -10,8 +10,13 @@ def calculate_amount_rock(file_name: str = "1", period: int = 0):
     coordinates_df = utl.read_coordinates(scenario_path)
     mineplan_df = utl.get_mineplan(mineplan_path)
 
+    # Filtrar el plan minero por periodo
+    filtered_mineplan_df = mineplan_df[mineplan_df["Period"] == period]
+
     print(coordinates_df)
     print(mineplan_df)
+    print(filtered_mineplan_df)
     print(period)
 
     return 0
+    
