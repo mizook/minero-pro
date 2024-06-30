@@ -11,18 +11,35 @@ from utils.utils import Utils as utl
 # Variables globales
 period_value = 0
 
-async def handle_button_click(button, file_name, period):
+# Manejar el evento de hacer click en el botón
+async def handle_button_click(button, file_name, period, is_upl):
+    # Agregar estado de carga al botón
     button.props("loading")
-    calculate_amount_rock(file_name, period)
+    # Si se apretó el botón para calcular UPL
+    if is_upl:
+        # Calcular UPL
+        print("Calcular UPL")
+    # Si se apretó el botón para calcular la cantidad de roca en un periodo
+    else:
+        # Validar que el periodo sea un número entero
+        try:
+            int(period)
+        except ValueError:
+            button.props(remove="loading")
+            return
+        # Calcular cantidad de roca en un periodo
+        calculate_amount_rock(file_name, period)
+    # Remover el estado de carga del botón
     button.props(remove="loading")
 
-def create_button(button_title, scenario_num):
+# Crear botón para realizar cálculos
+def create_button(button_title, scenario_num, is_upl):
     file_name = f"Scenario0{scenario_num}.txt"
     button = ui.button(button_title)
     button.on(
         "click",
         lambda _: asyncio.create_task(
-            handle_button_click(button, file_name, period_value)
+            handle_button_click(button, file_name, period_value, is_upl)
         ),
     )
     button.classes(UICommons.statistics_button_class)
@@ -70,10 +87,11 @@ def calculation_options_page(scenery_index: str = "1"):
         # Crear lista de botones
         with ui.list().classes("grid place-items-center h-full w-max-md mt-10"):
             # Crear botón para calcular UPL
-            ui.button(
+            create_button(
                 "Ultimate Pit Limit",
-                on_click=lambda: ui.navigate.to(),
-            ).classes(UICommons.button_class)
+                int(scenery_index),
+                True,
+            )
 
             # Título de la sección de calcular la cantidad de roca en un periodo
             ui.label("Cantidad de roca extraída en un periodo").classes("text-2xl")
@@ -89,6 +107,7 @@ def calculation_options_page(scenery_index: str = "1"):
             create_button(
                 "Calcular",
                 int(scenery_index),
+                False,
             )
 
     get_footer()
