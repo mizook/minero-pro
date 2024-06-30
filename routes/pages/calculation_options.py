@@ -5,6 +5,29 @@ from routes.footer import get_footer
 from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
 
+# Variables globales
+global_cord_value = 0
+
+# Validar que el valor ingresado sea un número entero
+def validate_integer_value(value: str) -> str | None:
+    try:
+        parsed_value = int(value)
+        return validate_integer_range(parsed_value)
+    except ValueError:
+        return "Debes ingresar un número entero."
+    return None
+
+# Validar que el valor ingresado esté en un rango específico
+def validate_integer_range(value: int) -> str | None:
+    if value < 0 or value > 5:
+        return "El valor debe ir de 0 a 5."
+    return None
+
+# Actualizar el valor de la variable global
+def on_input_value_change(obj: object):
+    global global_cord_value
+    global_cord_value = obj.value
+
 @ui.page(
     f"{calculations_path}/{calculation_options_path}/{{scenery_index}}",
     title="Minero Pro | Opciones de cálculo",
@@ -32,14 +55,17 @@ def calculation_options_page(scenery_index: str = "1"):
                 on_click=lambda: ui.navigate.to(),
             ).classes(UICommons.button_class)
 
-            # Crear botón para calcular cantidad de roca en un periodo
-            ui.label("Cantidad de roca en un periodo").classes("text-2xl")
+            # Título de la sección de calcular la cantidad de roca en un periodo
+            ui.label("Cantidad de roca extraída en un periodo").classes("text-2xl")
+            
             # Crear input para ingresar el periodo
             ui.input(
                 "Periodo",
-                validation=True,
-                value=True,
-            ).classes("w-full").on_value_change(callback=True)
+                validation=validate_integer_value,
+                value=global_cord_value,
+            ).classes("w-full").on_value_change(callback=on_input_value_change)
+            
+            # Crear botón para calcular la cantidad de roca en un periodo
             ui.button(
                 "Calcular", 
                 on_click=lambda: ui.navigate.to()
