@@ -37,6 +37,6 @@ class Utils:
     
     @staticmethod
     def get_mineplan(filename):
-        df = pd.read_csv(filename, sep=";")
+        df = pd.read_csv(filename, sep=",")
         df.columns = ["Period", "XIndex", "YIndex", "ZIndex"]
         return df

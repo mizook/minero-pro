@@ -1,12 +1,13 @@
 from nicegui import ui
 
+from app.amount_rock import calculate_amount_rock
 from routes.constants import calculation_options_path, calculations_path
 from routes.footer import get_footer
 from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
 
 # Variables globales
-global_cord_value = 0
+period_value = 0
 
 # Validar que el valor ingresado sea un número entero
 def validate_integer_value(value: str) -> str | None:
@@ -25,8 +26,8 @@ def validate_integer_range(value: int) -> str | None:
 
 # Actualizar el valor de la variable global
 def on_input_value_change(obj: object):
-    global global_cord_value
-    global_cord_value = obj.value
+    global period_value
+    period_value = obj.value
 
 @ui.page(
     f"{calculations_path}/{calculation_options_path}/{{scenery_index}}",
@@ -62,13 +63,13 @@ def calculation_options_page(scenery_index: str = "1"):
             ui.input(
                 "Periodo",
                 validation=validate_integer_value,
-                value=global_cord_value,
+                value=period_value,
             ).classes("w-full").on_value_change(callback=on_input_value_change)
             
             # Crear botón para calcular la cantidad de roca en un periodo
             ui.button(
                 "Calcular", 
-                on_click=lambda: ui.navigate.to()
-            ).classes(UICommons.button_class)
+                on_click=lambda: ui.navigate.to(calculate_amount_rock(f"Scenario0{scenery_index}.txt", period_value)),
+            ).classes(UICommons.statistics_button_class)
 
     get_footer()
