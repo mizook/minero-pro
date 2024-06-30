@@ -1,3 +1,5 @@
+import asyncio
+
 from nicegui import ui
 
 from app.statistics import show_scenario_statistics
@@ -7,11 +9,24 @@ from routes.go_back_button import get_go_back_button
 from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
 
-def create_button(scenario_num):
-    return ui.button(
-        f"Escenario {scenario_num+1}",
-        on_click=lambda: ui.navigate.to(show_scenario_statistics(f"Scenario0{scenario_num}.txt")),
-    ).classes(UICommons.statistics_button_class)
+# 
+async def handle_button_click(button, file_name):
+    button.props("loading")
+    show_scenario_statistics(file_name)
+    button.props(remove="loading")
+
+# 
+def create_button(button_tittle, scenario_num):
+    file_name = f"Scenario0{scenario_num}.txt"
+    button = ui.button(button_tittle)
+    button.on(
+        "click",
+        lambda _: asyncio.create_task(
+            handle_button_click(button, file_name)
+        ),
+    )
+    button.classes(UICommons.statistics_button_class)
+    return button
 
 @ui.page(
     statistics_path,
@@ -29,6 +44,6 @@ def statistics_page():
 
         with ui.list().classes("grid place-items-center grid-cols-2 gap-x-5 mt-10"):
             for index in range(10):
-                create_button(index)
+                create_button(f"Escenario {index + 1}", index)
 
     get_footer()
