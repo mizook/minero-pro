@@ -1,5 +1,24 @@
 from utils.utils import Utils as utl
 
+# Función para sumar la cantidad de roca
+def sum_amount_rock(mineplan_df, coordinates_df):
+    amount_rock = 0
+
+    # Iterar sobre el plan minero y sumar la cantidad de roca
+    for _, row in mineplan_df.iterrows():
+        # Obtener las coordenadas del plan minero
+        x_index, y_index, z_index = row["XIndex"], row["YIndex"], row["ZIndex"]
+        # Filtrar el DataFrame de coordenas por las coordenadas del plan minero
+        filter_df = (coordinates_df["X"] == x_index) & (coordinates_df["Y"] == y_index) & (coordinates_df["Z"] == z_index)
+        # Si existe la coordenada, sumar cantidad de roca
+        if not coordinates_df[filter_df].empty:
+            amount_rock += coordinates_df[filter_df]["Tonelaje"].values[0]
+        # Si no existe la coordenada, sumar cantidad de roca
+        else :
+            amount_rock += 15375
+
+    return amount_rock
+
 # Función para calcular cantidad de roca en un periodo
 def calculate_amount_rock(file_name: str = "1", period: int = 0):
     # Obtener paths de los archivos
@@ -13,10 +32,10 @@ def calculate_amount_rock(file_name: str = "1", period: int = 0):
     # Filtrar el plan minero por periodo
     filtered_mineplan_df = mineplan_df[mineplan_df["Period"] == period]
 
-    print(coordinates_df)
-    print(mineplan_df)
-    print(filtered_mineplan_df)
-    print(period)
+    # Calcular la cantidad de roca en un periodo
+    amount_rock = sum_amount_rock(filtered_mineplan_df, coordinates_df)
 
-    return 0
+    print(f"La cantidad de roca en el periodo {period} es: {amount_rock}")
+
+    return amount_rock
     
