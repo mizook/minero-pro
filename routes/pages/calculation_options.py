@@ -142,6 +142,7 @@ def calculation_options_page(scenery_index: str = "1"):
                 value=period_value,
             ).classes("w-full").on_value_change(callback=on_input_value_change)
 
+            # Crear las filas de las cantidades de roca y metal a la tabla
             rows = [
                 {'type': 'Roca general', 'amount': f"{amount_rock:.2f}"},
                 {'type': 'Roca A', 'amount': f"{amount_rock_a:.2f}"},
@@ -150,6 +151,7 @@ def calculation_options_page(scenery_index: str = "1"):
                 {'type': 'Metal 2', 'amount': f"{amount_metal_2:.2f}"},
             ]
 
+            # Crear tabla para mostrar las cantidades de roca y metal
             output_table = ui.table(rows=rows, columns=columns).classes("w-full")
                         
             # Crear botón para calcular la cantidad de roca en un periodo
