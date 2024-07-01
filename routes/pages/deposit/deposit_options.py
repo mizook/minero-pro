@@ -12,6 +12,9 @@ from utils.utils import Utils as utl
 global_axis_value = "X"
 global_cord_value = 0
 
+global_rock_type = "A"
+global_ore_grade_range = {"min": 20, "max": 80}
+
 
 async def handle_button_click(button, file_name, title, is_2d):
     try:
@@ -71,6 +74,47 @@ def on_input_value_change(obj: object):
     global_cord_value = obj.value
 
 
+def on_rock_type_change(obj: object):
+    global global_rock_type
+    global_rock_type = obj.value
+
+
+def on_ore_grade_range_change(obj: object):
+    global global_ore_grade_range
+    global_ore_grade_range = obj.value
+
+
+async def handle_view_filtered_scenary_click(button, file_name, title):
+    try:
+        int(global_cord_value)
+    except ValueError:
+        return
+    button.props("loading")
+
+    event = multiprocessing.Event()
+    process = multiprocessing.Process(
+        target=open_3d_scenery,
+        args=(file_name, title, event),
+    )
+    process.start()
+    await asyncio.to_thread(event.wait)
+    button.props(remove="loading")
+
+
+def display_view_filtered_scenery(scenario_num: str):
+    file_name = f"Scenario0{scenario_num}.txt"
+    title = f"Escenario {scenario_num}"
+    button = ui.button("Visualizar escenario filtrado")
+    button.on(
+        "click",
+        lambda _: asyncio.create_task(
+            handle_view_filtered_scenary_click(button, file_name, title)
+        ),
+    )
+    button.classes(UICommons.visualization_button_class)
+    return button
+
+
 @ui.page(
     f"{deposit_path}/{{scenery_index}}",
     title="Minero Pro | Escenario de Depósito",
@@ -87,6 +131,7 @@ def deposit_options_page(scenery_index: str = "1"):
         with ui.list().classes("grid place-items-center h-full w-max-md mt-10"):
             ui.label("Visualización 3D").classes("text-2xl")
             create_button("Visualizar", scenery_index, is_2d=False)
+
             ui.label("Visualización 2D").classes("text-2xl mt-10 mb-3")
             with ui.grid().classes("w-full place-items-start"):
                 ui.label("Eje de corte").classes("text-lg text-left")
@@ -97,11 +142,29 @@ def deposit_options_page(scenery_index: str = "1"):
                 "Coordenada de Corte",
                 validation=validate_integer_value,
                 value=global_cord_value,
-            ).classes("w-full").on_value_change(callback=on_input_value_change)
+            ).classes("w-full my-5").on_value_change(callback=on_input_value_change)
 
             create_button(
                 "Visualizar",
                 scenery_index,
                 is_2d=True,
             )
+
+            ui.label("Filtrados").classes("text-2xl mt-10 mb-3")
+            with ui.grid().classes("w-full place-items-start"):
+                ui.label("Filtrar por tipo de Roca").classes("text-lg text-left")
+            ui.select(["A", "B"], value=global_rock_type).classes(
+                "w-full"
+            ).on_value_change(callback=on_rock_type_change)
+            with ui.grid().classes("w-full place-items-start mt-10 mb-5"):
+                ui.label("Filtrado por rango de Ley").classes("text-lg text-left")
+            min_max_range = ui.range(
+                min=0, max=100, value=global_ore_grade_range
+            ).on_value_change(callback=on_ore_grade_range_change)
+            ui.label().bind_text_from(
+                min_max_range,
+                "value",
+                backward=lambda v: f'min: {v["min"]}, max: {v["max"]}',
+            ).classes("mb-5")
+            display_view_filtered_scenery(scenery_index)
     get_footer()
