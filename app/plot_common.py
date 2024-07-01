@@ -52,33 +52,33 @@ class PlotCommon:
 
     @staticmethod
     def get_rock_type_flag(x_index: int, y_index: int, expected_rock_type: str | None):
-        if expected_rock_type is not None:
-            if expected_rock_type == "A & B":  # Allow to show both rock types
-                return False
-            current_rock_type = utl.get_rock_type(x_index, y_index)
-            if current_rock_type != expected_rock_type:
-                return True  # continue flag to avoid add to mesh
-            else:
-                # If the rock type matchs, should be added
-                return False
-        # If the rock type is not defined, should be added
-        return False
+        if expected_rock_type is None:
+            return False
+
+        if expected_rock_type == "A & B":  # Allow to show both rock types
+            return False
+        current_rock_type = utl.get_rock_type(x_index, y_index)
+        if current_rock_type != expected_rock_type:
+            return True  # continue flag to avoid add to mesh
+        else:
+            # If the rock type matchs, should be added
+            return False
 
     @staticmethod
     def get_ore_grade_range_flag(
         ore_grade_range: dict | None, current_metal_grade: float
     ):
+        if ore_grade_range is None:
+            return False
+
         expected_min_value = ore_grade_range["min"]
         expected_max_value = ore_grade_range["max"]
-        if ore_grade_range is not None:
-            # If the current metal grade/ore is in range, should be added
-            if expected_min_value <= current_metal_grade <= expected_max_value:
-                return False
-            # Otherwise, should be skipped
-            else:
-                return True
-        # If the ore grade range is not defined, should be added
-        return False
+        # If the current metal grade/ore is in range, should be added
+        if expected_min_value <= current_metal_grade <= expected_max_value:
+            return False
+        # Otherwise, should be skipped
+        else:
+            return True
 
     @staticmethod
     def bring_window_to_front(window_title):
