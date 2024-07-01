@@ -53,6 +53,8 @@ class PlotCommon:
     @staticmethod
     def get_rock_type_flag(x_index: int, y_index: int, expected_rock_type: str | None):
         if expected_rock_type is not None:
+            if expected_rock_type == "A & B":  # Allow to show both rock types
+                return False
             current_rock_type = utl.get_rock_type(x_index, y_index)
             if current_rock_type != expected_rock_type:
                 return True  # continue flag to avoid add to mesh
@@ -69,9 +71,6 @@ class PlotCommon:
         expected_min_value = ore_grade_range["min"]
         expected_max_value = ore_grade_range["max"]
         if ore_grade_range is not None:
-            print("Current grade", current_metal_grade)
-            print("Expected min", expected_min_value)
-            print("Expected max", expected_max_value)
             # If the current metal grade/ore is in range, should be added
             if expected_min_value <= current_metal_grade <= expected_max_value:
                 return False

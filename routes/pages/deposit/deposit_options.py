@@ -153,7 +153,7 @@ def deposit_options_page(scenery_index: str = "1"):
             ui.label("Filtrados").classes("text-2xl mt-10 mb-3")
             with ui.grid().classes("w-full place-items-start"):
                 ui.label("Filtrar por tipo de Roca").classes("text-lg text-left")
-            ui.select(["A", "B"], value=global_rock_type).classes(
+            ui.select(["A", "B", "A & B"], value=global_rock_type).classes(
                 "w-full"
             ).on_value_change(callback=on_rock_type_change)
             with ui.grid().classes("w-full place-items-start mt-10 mb-5"):
