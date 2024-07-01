@@ -37,7 +37,7 @@ async def handle_button_click(button, file_name, title, is_2d):
 
 def create_button(button_title: str, scenario_num: str, is_2d: bool = True):
     file_name = f"Scenario0{scenario_num}.txt"
-    title = f"Escenario {scenario_num}"
+    title = f"Escenario {int(scenario_num) + 1}"
     button = ui.button(button_title)
     button.on(
         "click",
@@ -103,7 +103,7 @@ async def handle_view_filtered_scenary_click(button, file_name, title):
 
 def display_view_filtered_scenery(scenario_num: str):
     file_name = f"Scenario0{scenario_num}.txt"
-    title = f"Escenario {scenario_num} Filtrado"
+    title = f"Escenario {int(scenario_num) + 1} Filtrado"
     button = ui.button("Visualizar escenario filtrado")
     button.on(
         "click",

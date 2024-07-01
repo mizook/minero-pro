@@ -1,10 +1,41 @@
+import asyncio
+import multiprocessing
+
 from nicegui import ui
 
+from app.modeler import open_3d_period_scenery
 from routes.constants import mining_plan_path
 from routes.footer import get_footer
 from routes.go_back_button import get_go_back_button
 from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
+
+
+async def handle_button_click(button, scenery_num: int, title):
+    button.props("loading")
+
+    event = multiprocessing.Event()
+    process = multiprocessing.Process(
+        target=open_3d_period_scenery,
+        args=(scenery_num, title, event),
+    )
+    process.start()
+    await asyncio.to_thread(event.wait)
+    button.props(remove="loading")
+
+
+def create_button(scenery_num: str):
+    parsed_scenery_num = int(scenery_num)
+    title = f"Periodo {parsed_scenery_num + 1}"
+    button = ui.button(f"Periodo {parsed_scenery_num +1}")
+    button.on(
+        "click",
+        lambda _: asyncio.create_task(
+            handle_button_click(button, parsed_scenery_num, title)
+        ),
+    )
+    button.classes(UICommons.visualization_button_class)
+    return button
 
 
 @ui.page(
@@ -21,9 +52,8 @@ def mining_plan_page():
             ui.label("¡Plan Minero!").classes(UICommons.title_class)
             ui.image(utl.get_minero_pro_image()).classes("ml-5 w-[42px] h-[42px]")
 
-        with ui.list().classes("grid place-items-center"):
-            ui.button("WORK IN PROGRESS", on_click=lambda: ui.notify("WIP")).classes(
-                UICommons.button_class
-            )
+        with ui.list().classes("grid place-items-center grid-cols-2 gap-5 mt-10"):
+            for index in range(5):
+                create_button(index)
 
     get_footer()

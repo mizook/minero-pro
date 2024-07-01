@@ -36,6 +36,11 @@ class Utils:
         return df
 
     @staticmethod
+    def read_period_coordinates(filename) -> pd.DataFrame:
+        df = pd.read_csv(filename, header=0)
+        return df
+
+    @staticmethod
     def get_mineplan(filename):
         df = pd.read_csv(filename, sep=",")
         df.columns = ["Period", "XIndex", "YIndex", "ZIndex"]

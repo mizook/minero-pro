@@ -121,3 +121,36 @@ def open_3d_filtered_scenery(
         args=(file_name, title, ore_grade_range, rock_type, event),
     )
     process.start()
+
+
+def abstract_period_rendering(scenery_num: int):
+    path = utl.get_resource_path("data/MinePlan.txt")
+    coordinates_df = utl.read_period_coordinates(path)
+
+    grid = PlotCommon.get_period_grid(scenery_num, coordinates_df)
+
+    plotter = pv.Plotter()
+    return grid, plotter
+
+
+def rendering_3d_period(scenery_num: int, title: str, event):
+    grid, plotter = abstract_period_rendering(scenery_num)
+
+    plotter.add_mesh(grid, show_edges=True)
+    plotter.show_axes()
+    plotter.show_grid()
+
+    plotter.title = title
+
+    thread = threading.Thread(target=PlotCommon.bring_window_to_front, args=(title,))
+    thread.start()
+
+    plotter.show()
+    event.set()
+
+
+def open_3d_period_scenery(scenery_num: int, title: str, event):
+    process = multiprocessing.Process(
+        target=rendering_3d_period, args=(scenery_num, title, event)
+    )
+    process.start()

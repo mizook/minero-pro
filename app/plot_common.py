@@ -1,6 +1,7 @@
 import time
 
 import numpy as np
+import pandas as pd
 import pygetwindow as gw
 import pyvista as pv
 
@@ -87,3 +88,15 @@ class PlotCommon:
         if windows:
             window = windows[0]
             window.activate()
+
+    @staticmethod
+    def get_period_grid(period: int, coordinates_df: pd.DataFrame):
+        grid = pv.MultiBlock()
+
+        for _, row in coordinates_df.iterrows():
+            if period != int(row["Period"]):
+                continue
+            x, y, z = int(row["XIndex"]), int(row["YIndex"]), int(row["ZIndex"])
+            cube = pv.Cube(center=(x, y, z), x_length=1, y_length=1, z_length=1)
+            grid.append(cube)
+        return grid
