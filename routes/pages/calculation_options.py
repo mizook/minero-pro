@@ -13,7 +13,7 @@ from utils.utils import Utils as utl
 period_value = 0
 
 # Manejar el evento de hacer click en el botón
-async def handle_button_click(button, file_name, period, is_upl, output_labels):
+async def handle_button_click(button, file_name, period, is_upl, output_table):
     # Agregar estado de carga al botón
     button.props("loading")
     # Si se apretó el botón para calcular UPL
@@ -31,25 +31,29 @@ async def handle_button_click(button, file_name, period, is_upl, output_labels):
         # Calcular cantidad de roca en un periodo si el periodo se encuentra en el rango
         if period in range(0,6): 
             results = calculate_amount_rock(file_name, period)
-            global amount_rock, amount_metal, amount_metal_2
-            amount_rock, amount_metal, amount_metal_2 = results
+            global amount_rock, amount_rock_a, amount_rock_b, amount_metal, amount_metal_2
+            amount_rock, amount_rock_a, amount_rock_b, amount_metal, amount_metal_2 = results
 
-            # Actualizar los labels de la cantidad de roca
-            output_labels[0].text = f"Cantidad de roca: {amount_rock:.2f}"
-            output_labels[1].text = f"Cantidad de metal 1: {amount_metal:.2f}"
-            output_labels[2].text = f"Cantidad de metal 2: {amount_metal_2:.2f}"
+            # Actualizar la tabla con los nuevos valores
+            output_table.rows = [
+                {'type': 'Roca general', 'amount': f"{amount_rock:.2f}"},
+                {'type': 'Roca A', 'amount': f"{amount_rock_a:.2f}"},
+                {'type': 'Roca B', 'amount': f"{amount_rock_b:.2f}"},
+                {'type': 'Metal', 'amount': f"{amount_metal:.2f}"},
+                {'type': 'Metal 2', 'amount': f"{amount_metal_2:.2f}"},
+            ]
 
     # Remover el estado de carga del botón
     button.props(remove="loading")
 
 # Crear botón para realizar cálculos
-def create_button(button_title, scenario_num, is_upl, output_labels):
+def create_button(button_title, scenario_num, is_upl, output_table):
     file_name = f"Scenario0{scenario_num}.txt"
     button = ui.button(button_title)
     button.on(
         "click",
         lambda _: asyncio.create_task(
-            handle_button_click(button, file_name, period_value, is_upl, output_labels)
+            handle_button_click(button, file_name, period_value, is_upl, output_table)
         ),
     )
     button.classes(UICommons.statistics_button_class)
@@ -84,9 +88,27 @@ def on_input_value_change(obj: object):
 
 # Página de opciones de cálculo
 def calculation_options_page(scenery_index: str = "1"):
+    # Crear columnas para la tabla
+    columns = [
+        {
+            'name': 'type', 
+            'label': 'Tipo', 
+            'field': 'type', 
+            'required': True, 
+            'align': 'left'
+        },
+        {
+            'name': 'amount', 
+            'label': 'Cantidad', 
+            'field': 'amount', 
+            'sortable': True},
+    ]
+
     # Reiniciar cantidad de roca, metal y segundo metal
     period_value = 0
     amount_rock = 0
+    amount_rock_a = 0
+    amount_rock_b = 0
     amount_metal = 0
     amount_metal_2 = 0
 
@@ -120,19 +142,22 @@ def calculation_options_page(scenery_index: str = "1"):
                 value=period_value,
             ).classes("w-full").on_value_change(callback=on_input_value_change)
 
-            # Mostrar cantidad calculada de roca, metal y segundo metal
-            output_labels = [
-                ui.label(f"Cantidad de Roca: {amount_rock:.2f}"),
-                ui.label(f"Cantidad de Metal: {amount_metal:.2f}"),
-                ui.label(f"Cantidad de Metal 2: {amount_metal_2:.2f}")
+            rows = [
+                {'type': 'Roca general', 'amount': f"{amount_rock:.2f}"},
+                {'type': 'Roca A', 'amount': f"{amount_rock_a:.2f}"},
+                {'type': 'Roca B', 'amount': f"{amount_rock_b:.2f}"},
+                {'type': 'Metal', 'amount': f"{amount_metal:.2f}"},
+                {'type': 'Metal 2', 'amount': f"{amount_metal_2:.2f}"},
             ]
-            
+
+            output_table = ui.table(rows=rows, columns=columns).classes("w-full")
+                        
             # Crear botón para calcular la cantidad de roca en un periodo
             create_button(
                 "Calcular",
                 int(scenery_index),
                 False,
-                output_labels,
+                output_table,
             )
 
     get_footer()
