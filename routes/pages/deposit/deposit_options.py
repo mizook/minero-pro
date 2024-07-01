@@ -111,7 +111,7 @@ def display_view_filtered_scenery(scenario_num: str):
             handle_view_filtered_scenary_click(button, file_name, title)
         ),
     )
-    button.classes(UICommons.visualization_button_class)
+    button.classes(f"{UICommons.visualization_button_class} mb-[100px]")
     return button
 
 
