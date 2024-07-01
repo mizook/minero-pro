@@ -10,7 +10,7 @@ from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
 
 # Variables globales
-period_value = 0
+period_value = 1
 
 # Manejar el evento de hacer click en el botón
 async def handle_button_click(button, file_name, period, is_upl, output_table):
@@ -30,7 +30,7 @@ async def handle_button_click(button, file_name, period, is_upl, output_table):
             return
         # Calcular cantidad de roca en un periodo si el periodo se encuentra en el rango
         if period in range(0,6): 
-            results = calculate_amount_rock(file_name, period)
+            results = calculate_amount_rock(file_name, period - 1)
             global amount_rock, amount_rock_a, amount_rock_b, amount_metal, amount_metal_2
             amount_rock, amount_rock_a, amount_rock_b, amount_metal, amount_metal_2 = results
 
@@ -112,6 +112,9 @@ def calculation_options_page(scenery_index: str = "1"):
     amount_metal = 0
     amount_metal_2 = 0
 
+    # Crear lista de periodos
+    periods = [1, 2, 3, 4, 5]
+
     # Obtener botón para volver atrás
     ui.link("<- Volver atrás", calculations_path).classes("text-yellow-8")
 
@@ -135,12 +138,12 @@ def calculation_options_page(scenery_index: str = "1"):
             # Título de la sección de calcular la cantidad de roca en un periodo
             ui.label("Cantidad de roca extraída en un periodo").classes("text-2xl")
             
-            # Crear input para ingresar el periodo
-            ui.input(
-                "Periodo",
-                validation=validate_integer_value,
-                value=period_value,
-            ).classes("w-full").on_value_change(callback=on_input_value_change)
+#           # Crear input para ingresar el periodo
+            with ui.grid().classes("w-full place-items-start"):
+                ui.label("Filtrar por periodo").classes("text-lg text-left")
+            ui.select(periods, value=period_value).classes(
+                "w-full"
+            ).on_value_change(callback=on_input_value_change)
 
             # Crear las filas de las cantidades de roca y metal a la tabla
             rows = [
