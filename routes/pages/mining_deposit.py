@@ -9,7 +9,7 @@ from utils.utils import Utils as utl
 
 def create_button(scenario_num):
     return ui.button(
-        f"Escenario {scenario_num}",
+        f"Escenario {int(scenario_num) + 1}",
         on_click=lambda: ui.navigate.to(deposit_options(scenario_num)),
     ).classes(UICommons.statistics_button_class)
 

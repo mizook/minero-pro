@@ -125,7 +125,9 @@ def deposit_options_page(scenery_index: str = "1"):
     ui.link("<- Volver atrás", mining_deposit_path).classes("text-yellow-8")
     with ui.element("div").classes("grid place-items-center w-full h-[550px]"):
         with ui.element("div").classes("inline-flex"):
-            ui.label(f"Scenario {scenery_index}").classes(UICommons.title_class)
+            ui.label(f"Scenario {int(scenery_index) + 1}").classes(
+                UICommons.title_class
+            )
             ui.image(utl.get_minero_pro_image()).classes("ml-5 w-[42px] h-[42px]")
 
         with ui.list().classes("grid place-items-center h-full w-max-md mt-10"):
