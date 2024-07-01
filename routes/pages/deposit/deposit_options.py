@@ -3,17 +3,17 @@ import multiprocessing
 
 from nicegui import ui
 
-from app.modeler import open_2d_scenery, open_3d_scenery
+from app.modeler import open_2d_scenery, open_3d_filtered_scenery, open_3d_scenery
 from routes.constants import deposit_path, mining_deposit_path
 from routes.footer import get_footer
 from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
 
-global_axis_value = "X"
-global_cord_value = 0
+global_axis_value: str = "X"
+global_cord_value = 0  # do not type because sometimes could be a string if users tries to input a string
 
-global_rock_type = "A"
-global_ore_grade_range = {"min": 20, "max": 80}
+global_rock_type: str = "A"
+global_ore_grade_range: dict = {"min": 20, "max": 80}
 
 
 async def handle_button_click(button, file_name, title, is_2d):
@@ -93,8 +93,8 @@ async def handle_view_filtered_scenary_click(button, file_name, title):
 
     event = multiprocessing.Event()
     process = multiprocessing.Process(
-        target=open_3d_scenery,
-        args=(file_name, title, event),
+        target=open_3d_filtered_scenery,
+        args=(file_name, title, global_ore_grade_range, global_rock_type, event),
     )
     process.start()
     await asyncio.to_thread(event.wait)
@@ -103,7 +103,7 @@ async def handle_view_filtered_scenary_click(button, file_name, title):
 
 def display_view_filtered_scenery(scenario_num: str):
     file_name = f"Scenario0{scenario_num}.txt"
-    title = f"Escenario {scenario_num}"
+    title = f"Escenario {scenario_num} Filtrado"
     button = ui.button("Visualizar escenario filtrado")
     button.on(
         "click",

@@ -7,11 +7,15 @@ from app.plot_common import PlotCommon
 from utils.utils import Utils as utl
 
 
-def abstract_rendering(file_name: str):
+def abstract_rendering(
+    file_name: str, ore_grade_range: dict | None = None, rock_type: str | None = None
+):
     path = utl.get_resource_path(f"data/scenarios/{file_name}")
     coordinates_df = utl.read_coordinates(path)
 
-    grid = PlotCommon.get_deposit_grid(coordinates_df)
+    grid = PlotCommon.get_deposit_grid(
+        coordinates_df, ore_grade_range=ore_grade_range, rock_type=rock_type
+    )
 
     plotter = pv.Plotter()
     return grid, plotter
@@ -83,8 +87,37 @@ def rendering_3d(file_name: str, title: str, event):
     event.set()
 
 
+def rendering_filtered_3d(
+    file_name: str, title: str, ore_grade_range: dict, rock_type: str, event: any
+):
+    grid, plotter = abstract_rendering(
+        file_name, ore_grade_range=ore_grade_range, rock_type=rock_type
+    )
+
+    plotter.add_mesh(grid, show_edges=True)
+    plotter.show_axes()
+
+    plotter.title = title
+
+    thread = threading.Thread(target=PlotCommon.bring_window_to_front, args=(title,))
+    thread.start()
+
+    plotter.show()
+    event.set()
+
+
 def open_3d_scenery(file_name: str, title: str, event):
     process = multiprocessing.Process(
         target=rendering_3d, args=(file_name, title, event)
+    )
+    process.start()
+
+
+def open_3d_filtered_scenery(
+    file_name: str, title: str, ore_grade_range: dict, rock_type: str, event: any
+):
+    process = multiprocessing.Process(
+        target=rendering_filtered_3d,
+        args=(file_name, title, ore_grade_range, rock_type, event),
     )
     process.start()
