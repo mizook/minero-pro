@@ -3,6 +3,7 @@ import asyncio
 from nicegui import ui
 
 from app.amount_rock import calculate_amount_rock
+from app.upl_modeler import calcular_upl
 from routes.constants import calculation_options_path, calculations_path
 from routes.footer import get_footer
 from utils.ui_commons import UICommons
@@ -17,7 +18,7 @@ async def handle_button_click(button, file_name, period, is_upl, output_labels):
     button.props("loading")
     # Si se apretó el botón para calcular UPL
     if is_upl:
-        # Calcular UPL
+        calcular_upl(file_name)
         print("Calcular UPL")
     # Si se apretó el botón para calcular la cantidad de roca en un periodo
     else:
