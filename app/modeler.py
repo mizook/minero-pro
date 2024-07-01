@@ -25,6 +25,7 @@ def rendering_2d(file_name: str, title: str, axis_view: str, event):
     grid, plotter = abstract_rendering(file_name)
     plotter.add_mesh(grid, show_edges=True, pickable=False, label="Vista 2D")
     plotter.show_axes()
+    plotter.show_grid()
 
     if axis_view == "X":
         plotter.view_xy()
@@ -55,6 +56,7 @@ def rendering_slice_2d(file_name: str, title: str, axis: str, cord: int, event):
 
     plotter.add_mesh(sliced_mesh, show_edges=True)
     plotter.show_axes()
+    plotter.show_grid()
 
     plotter.title = title
 
@@ -77,6 +79,7 @@ def rendering_3d(file_name: str, title: str, event):
 
     plotter.add_mesh(grid, show_edges=True)
     plotter.show_axes()
+    plotter.show_grid()
 
     plotter.title = title
 
@@ -96,6 +99,7 @@ def rendering_filtered_3d(
 
     plotter.add_mesh(grid, show_edges=True)
     plotter.show_axes()
+    plotter.show_grid()
 
     plotter.title = title
 
