@@ -108,7 +108,7 @@ def calculate_borderline(matrices, y_pos):
             for z in range(matrices.shape[2] - 2):
                 matrices[column][y_pos][z] = 0
         else:
-            for z in range(matrices.shape[2] - 2, row, -1):
+            for z in range(0, row):
                 matrices[column][y_pos][z] = 0
     
     
@@ -153,6 +153,7 @@ def calculate_upl(file_name):
 
     complete_mesh(coordinates_df, x_range, y_range, z_range, default_tons, default_metal)
     mesh_value(coordinates_df, metal_value, metal_cost, processing_cost, foundry_cost, metal_recovered)
+    print(coordinates_df)
     matrices = create_matrices(coordinates_df)
     matrices_aux = create_matrices(coordinates_df)
     calculate_acum(matrices)

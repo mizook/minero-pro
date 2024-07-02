@@ -167,7 +167,7 @@ def abstract_pit_rendering(coordinates_df):
 
 
 def rendering_3d_pit(df, title: str, event):
-    grid, plotter = abstract_period_rendering(df)
+    grid, plotter = abstract_pit_rendering(df)
 
     plotter.add_mesh(grid, show_edges=True)
     plotter.show_axes()

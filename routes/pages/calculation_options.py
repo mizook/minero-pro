@@ -3,8 +3,7 @@ import asyncio
 from nicegui import ui
 
 from app.amount_rock import calculate_amount_rock
-from app.upl_modeler import calcular_upl
-from routes.constants import calculation_options_path, calculations_path
+from routes.constants import calculation_options_path, calculations_path, upl_options
 from routes.footer import get_footer
 from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
@@ -14,12 +13,12 @@ period_value = 1
 law_range: dict = {"min": 0, "max": 100}
 
 # Manejar el evento de hacer click en el botón
-async def handle_button_click(button, file_name, period, is_upl, output_table, law_range):
+async def handle_button_click(button, file_name, period, is_upl, output_table, law_range, scenario_num):
     # Agregar estado de carga al botón
     button.props("loading")
     # Si se apretó el botón para calcular UPL
     if is_upl:
-        calcular_upl(file_name)
+        ui.navigate.to(upl_options(scenario_num))
     # Si se apretó el botón para calcular la cantidad de roca en un periodo
     else:
         # Validar que el periodo sea un número entero
@@ -53,11 +52,17 @@ def create_button(button_title, scenario_num, is_upl, output_table, law_range):
     button.on(
         "click",
         lambda _: asyncio.create_task(
-            handle_button_click(button, file_name, period_value, is_upl, output_table, law_range)
+            handle_button_click(button, file_name, period_value, is_upl, output_table, law_range, scenario_num)
         ),
     )
     button.classes(UICommons.statistics_button_class)
     return button
+
+def create_button_upl(scenario_num):
+    return ui.button(
+        "Ultimate Pit Limit",
+        on_click=lambda: ui.navigate.to(upl_options(scenario_num)),
+    ).classes(UICommons.statistics_button_class)
 
 # Validar que el valor ingresado sea un número entero
 def validate_integer_value(value: str) -> str | None:
@@ -134,14 +139,7 @@ def calculation_options_page(scenery_index: str = "1"):
         # Crear lista de botones
         with ui.list().classes("grid place-items-center h-full w-max-md mt-10"):
             # Crear botón para calcular UPL
-            create_button(
-                "Ultimate Pit Limit",
-                int(scenery_index),
-                True,
-                None,
-                None,
-            )
-
+            create_button_upl(scenery_index)
             # Título de la sección de calcular la cantidad de roca en un periodo
             ui.label("Cantidad de roca extraída en un periodo").classes("text-2xl mt-3")
             
