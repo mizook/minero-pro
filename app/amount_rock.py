@@ -2,6 +2,7 @@ from utils.utils import Utils as utl
 
 # Función para sumar la cantidad de roca
 def sum_amount_rock(mineplan_df, coordinates_df, law_range):
+    # Inicializar variables
     amount_rock = 0
     amount_rock_a = 0
     amount_rock_b = 0
@@ -15,7 +16,7 @@ def sum_amount_rock(mineplan_df, coordinates_df, law_range):
         # Filtrar el DataFrame de coordenas por las coordenadas del plan minero
         filter_df = (coordinates_df["X"] == x_index) & (coordinates_df["Y"] == y_index) & (coordinates_df["Z"] == z_index)
 
-        # Si existe la coordenada y se encuentra en el rango, sumar cantidad de roca
+        # Si existe la coordenada
         if not coordinates_df[filter_df].empty:
             # Calcular la ley de metal
             metal_law = (coordinates_df[filter_df]["Metal"].values[0] / coordinates_df[filter_df]["Tonelaje"].values[0]) * 100
