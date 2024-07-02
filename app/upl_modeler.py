@@ -75,9 +75,10 @@ def calculate_borderline(matrices, y_pos):
 
     borderline = [(11, max_column)]
 
+    pit_value = matrices[max_column][y_pos][11]
+
     column = max_column
     while column > 0:
-        print('hola')
         actual_rows = borderline[-1][0]
         
         column -= 1
@@ -110,14 +111,8 @@ def calculate_borderline(matrices, y_pos):
             for z in range(matrices.shape[2] - 2, row, -1):
                 matrices[column][y_pos][z] = 0
     
-    pit_value = 0
-    for x in range(matrices.shape[0]):
-        for z in range(matrices.shape[2]):
-            pit_value += matrices[x][y_pos][z]
     
     return pit_value
-
-
 
 
 def get_row_borderline(borderline, column):
@@ -127,7 +122,21 @@ def get_row_borderline(borderline, column):
     return None
 
 
-def calcular_upl(file_name):
+def pit_to_df(matrices):
+    data = []
+
+    for x in range(6, matrices.shape[0]):
+        for y in range(10, matrices.shape[1]):
+            for z in range(3, matrices.shape[2]):
+                value = matrices[x][y][z]
+                if(value == 0):
+                    data.append([x, y, z])
+
+    df = pd.DataFrame(data, columns=['X', 'Y', 'Z'])
+    return df
+
+
+def calculate_upl(file_name):
     x_range = (6, 30)
     y_range = (10, 21)
     z_range = (3, 11)
@@ -145,13 +154,17 @@ def calcular_upl(file_name):
     complete_mesh(coordinates_df, x_range, y_range, z_range, default_tons, default_metal)
     mesh_value(coordinates_df, metal_value, metal_cost, processing_cost, foundry_cost, metal_recovered)
     matrices = create_matrices(coordinates_df)
+    matrices_aux = create_matrices(coordinates_df)
     calculate_acum(matrices)
     max_sum(matrices)
+   
     pit_value = 0
     for y in range(10,22):
         pit_value += calculate_borderline(matrices, y)
+
+    pit_df = pit_to_df(matrices)
         
-    print(pit_value)
+    return pit_df, pit_value
 
 
     

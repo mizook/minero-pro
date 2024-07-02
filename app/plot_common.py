@@ -100,3 +100,13 @@ class PlotCommon:
             cube = pv.Cube(center=(x, y, z), x_length=1, y_length=1, z_length=1)
             grid.append(cube)
         return grid
+
+    @staticmethod
+    def get_pit_grid(coordinates_df: pd.DataFrame):
+        grid = pv.MultiBlock()
+
+        for _, row in coordinates_df.iterrows():
+            x, y, z = int(row["XIndex"]), int(row["YIndex"]), int(row["ZIndex"])
+            cube = pv.Cube(center=(x, y, z), x_length=1, y_length=1, z_length=1)
+            grid.append(cube)
+        return grid

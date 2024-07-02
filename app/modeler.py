@@ -158,3 +158,32 @@ def open_3d_period_scenery(scenery_num: int, title: str, event):
         target=rendering_3d_period, args=(scenery_num, title, event)
     )
     process.start()
+
+def abstract_pit_rendering(coordinates_df):
+    grid = PlotCommon.get_pit_grid(coordinates_df)
+
+    plotter = pv.Plotter()
+    return grid, plotter
+
+
+def rendering_3d_pit(df, title: str, event):
+    grid, plotter = abstract_period_rendering(df)
+
+    plotter.add_mesh(grid, show_edges=True)
+    plotter.show_axes()
+    plotter.show_grid()
+
+    plotter.title = title
+
+    thread = threading.Thread(target=PlotCommon.bring_window_to_front, args=(title,))
+    thread.start()
+
+    plotter.show()
+    event.set()
+
+
+def open_3d_pit_scenery(df, title: str, event):
+    process = multiprocessing.Process(
+        target=rendering_3d_pit, args=(df, title, event)
+    )
+    process.start()
