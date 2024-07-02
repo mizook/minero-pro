@@ -182,5 +182,7 @@ def calculation_options_page(scenery_index: str = "1"):
                 output_table,
                 law_range,
             )
+            ui.label("").classes("mb-16")
+            
 
     get_footer()
