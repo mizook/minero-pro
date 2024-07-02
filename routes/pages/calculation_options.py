@@ -20,7 +20,6 @@ async def handle_button_click(button, file_name, period, is_upl, output_table, l
     # Si se apretó el botón para calcular UPL
     if is_upl:
         calcular_upl(file_name)
-        print("Calcular UPL")
     # Si se apretó el botón para calcular la cantidad de roca en un periodo
     else:
         # Validar que el periodo sea un número entero

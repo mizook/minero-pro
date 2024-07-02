@@ -19,7 +19,6 @@ def sum_amount_rock(mineplan_df, coordinates_df, law_range):
         if not coordinates_df[filter_df].empty:
             metal_law = (coordinates_df[filter_df]["Metal"].values[0] / coordinates_df[filter_df]["Tonelaje"].values[0]) * 100
             if validate_metal_law(metal_law, law_range):
-                print(x_index, y_index, z_index)
                 amount_rock += coordinates_df[filter_df]["Tonelaje"].values[0]
                 amount_metal += coordinates_df[filter_df]["Metal"].values[0]
                 amount_metal_2 += coordinates_df[filter_df]["Metal2"].values[0]
