@@ -16,10 +16,11 @@ def complete_mesh(df, x_range, y_range, z_range, default_tons, default_metal):
         'Z': z_vals.ravel()
     })
 
-    df = pd.merge(full_grid, df, on=['X', 'Y', 'Z'], how='left')
-    df['Tonelaje'].fillna(default_tons, inplace=True)
-    df['Metal'].fillna(default_metal, inplace=True)
-    df['Metal2'].fillna(0, inplace=True)
+    merged_df = full_grid.merge(df, on=['X', 'Y', 'Z'], how='left')
+    merged_df['Tonelaje'].fillna(default_tons, inplace=True)
+    merged_df['Metal'].fillna(default_metal, inplace=True)
+    merged_df['Metal2'].fillna(0, inplace=True)
+    return merged_df
 
 
 def calculate_cube_value(metal_tons, total_tons, metal_value, metal_cost, processing_cost, foundry_cost, metal_recovered):
@@ -66,6 +67,7 @@ def max_sum(matrices):
                 matrices[x][y][z] += max(matrices[x-1][y][z+1], matrices[x-1][y][z], matrices[x-1][y][z-1] )
 
 def calculate_borderline(matrices, y_pos):
+
     max_value = -np.inf
     max_column = -1
     for x in range(6, matrices.shape[0]-1):
@@ -80,16 +82,14 @@ def calculate_borderline(matrices, y_pos):
     column = max_column
     while column > 0:
         actual_rows = borderline[-1][0]
-        
         column -= 1
 
         adjacents = []
         if actual_rows > 0:
             adjacents.append((actual_rows - 1, column))
         adjacents.append((actual_rows, column))
-        if actual_rows < matrices.shape[0] - 1 :
+        if actual_rows < 11 :
             adjacents.append((actual_rows + 1, column))
-
         max_value = -np.inf
         max_position = None
         for position in adjacents:
@@ -102,6 +102,7 @@ def calculate_borderline(matrices, y_pos):
         if max_position[0] == 11:
             break
 
+    print(borderline)
     for column in range(matrices.shape[0]):
         row = get_row_borderline(borderline, column)
         if row == None:
@@ -127,7 +128,7 @@ def pit_to_df(matrices):
 
     for x in range(6, matrices.shape[0]):
         for y in range(10, matrices.shape[1]):
-            for z in range(3, matrices.shape[2]):
+            for z in range(3, matrices.shape[2]-1):
                 value = matrices[x][y][z]
                 if(value == 0):
                     data.append([x, y, z])
@@ -137,9 +138,9 @@ def pit_to_df(matrices):
 
 
 def calculate_upl(file_name):
-    x_range = (6, 30)
-    y_range = (10, 21)
-    z_range = (3, 11)
+    x_range = (6, 31)
+    y_range = (10, 22)
+    z_range = (3, 12)
     default_tons = 15375
     default_metal = 0
     metal_value = 10000 #USD/Ton 
@@ -151,11 +152,10 @@ def calculate_upl(file_name):
     path = utl.get_resource_path(f"data/scenarios/{file_name}")
     coordinates_df = utl.read_coordinates(path)
 
-    complete_mesh(coordinates_df, x_range, y_range, z_range, default_tons, default_metal)
-    mesh_value(coordinates_df, metal_value, metal_cost, processing_cost, foundry_cost, metal_recovered)
-    print(coordinates_df)
-    matrices = create_matrices(coordinates_df)
-    matrices_aux = create_matrices(coordinates_df)
+    mesh_df = complete_mesh(coordinates_df, x_range, y_range, z_range, default_tons, default_metal)
+    mesh_value(mesh_df, metal_value, metal_cost, processing_cost, foundry_cost, metal_recovered)
+    matrices = create_matrices(mesh_df)
+    matrices_aux = create_matrices(mesh_df)
     calculate_acum(matrices)
     max_sum(matrices)
    

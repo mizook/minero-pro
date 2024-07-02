@@ -1,7 +1,7 @@
 mining_deposit_path = "/yacimiento-minero"
 mining_plan_path = "/plan-minero"
 calculations_path = "/calculos"
-calculation_options_path = "/opciones-calculos"
+calculation_options_path = "opciones-calculos"
 statistics_path = "/estadisticas"
 home_path = "/"
 deposit_path = "/scenery"

@@ -1,11 +1,11 @@
 from nicegui import ui
 
-from routes.pages import calculation_options, calculations, home, mining_deposit, mining_plan, statistics, upl
 from routes.pages.deposit import deposit_options
-from routes.pages import home, statistics
+from routes.pages import home, statistics, upl
 from routes.pages.plan import mining_plan, plan_options
 from routes.pages.calculation import calculation_options, calculations
 from routes.pages.deposit import deposit_options, mining_deposit
+
 
 # Lista de páginas a ejecutar
 pages_to_run = [
