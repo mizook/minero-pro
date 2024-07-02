@@ -102,7 +102,6 @@ def calculate_borderline(matrices, y_pos):
         if max_position[0] == 11:
             break
 
-    print(borderline)
     for column in range(matrices.shape[0]):
         row = get_row_borderline(borderline, column)
         if row == None:
