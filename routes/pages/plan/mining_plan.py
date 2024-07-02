@@ -21,9 +21,6 @@ def create_button(scenery_num: str):
     ).classes(UICommons.statistics_button_class)
 
 
-
-
-
 @ui.page(
     mining_plan_path,
     title="Minero Pro | Plan Minero",

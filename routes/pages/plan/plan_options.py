@@ -3,7 +3,8 @@ import multiprocessing
 
 from nicegui import ui
 
-from app.modeler import open_2d_scenery, open_3d_filtered_scenery, open_3d_scenery, open_3d_period_scenery
+from app.modeler import open_2d_scenery, open_3d_filtered_scenery, open_3d_scenery, open_3d_period_scenery, \
+    open_2d_plan_scenery
 from routes.constants import mining_deposit_path, plan_path, mining_plan_path
 from routes.footer import get_footer
 from utils.ui_commons import UICommons
@@ -21,8 +22,10 @@ async def handle_button_click(button, scenery_num: int, title, is_2d):
 
     event = multiprocessing.Event()
     process = multiprocessing.Process(
-        target=open_3d_period_scenery,
-        args=(scenery_num, title, event),
+        target=open_2d_plan_scenery if is_2d else open_3d_period_scenery,
+        args=(scenery_num, title, global_axis_value, global_cord_value, event)
+        if is_2d
+        else (scenery_num, title, event)
     )
     process.start()
     await asyncio.to_thread(event.wait)
@@ -77,7 +80,7 @@ def on_ore_grade_range_change(obj: object):
     global_ore_grade_range = obj.value
 
 
-async def handle_view_filtered_scenary_click(button, file_name, title):
+async def handle_view_filtered_scenary_click(button, title):
     try:
         int(global_cord_value)
     except ValueError:
@@ -87,7 +90,7 @@ async def handle_view_filtered_scenary_click(button, file_name, title):
     event = multiprocessing.Event()
     process = multiprocessing.Process(
         target=open_3d_filtered_scenery,
-        args=(file_name, title, global_ore_grade_range, global_rock_type, event),
+        args=(title, global_ore_grade_range, global_rock_type, event),
     )
     process.start()
     await asyncio.to_thread(event.wait)
@@ -95,13 +98,12 @@ async def handle_view_filtered_scenary_click(button, file_name, title):
 
 
 def display_view_filtered_scenery(scenario_num: str):
-    file_name = f"Scenario0{scenario_num}.txt"
-    title = f"Escenario {int(scenario_num) + 1} Filtrado"
-    button = ui.button("Visualizar escenario filtrado")
+    title = f"Plan Minero {int(scenario_num) + 1} Filtrado"
+    button = ui.button("Visualizar plan minero filtrado")
     button.on(
         "click",
         lambda _: asyncio.create_task(
-            handle_view_filtered_scenary_click(button, file_name, title)
+            handle_view_filtered_scenary_click(button, title)
         ),
     )
     button.classes(f"{UICommons.visualization_button_class} mb-[100px]")
@@ -114,18 +116,18 @@ def display_view_filtered_scenery(scenario_num: str):
     favicon=utl.get_app_favicon(),
     dark=True,
 )
-def plan_options_page(scenery_index: str = "1"):
+def plan_options_page(plan_scenery_index: str = "1"):
     ui.link("<- Volver atrás", mining_plan_path).classes("text-yellow-8")
     with ui.element("div").classes("grid place-items-center w-full h-[550px]"):
         with ui.element("div").classes("inline-flex"):
-            ui.label(f"Plan Minero {int(scenery_index) + 1}").classes(
+            ui.label(f"Plan Minero {int(plan_scenery_index) + 1}").classes(
                 UICommons.title_class
             )
             ui.image(utl.get_minero_pro_image()).classes("ml-5 w-[42px] h-[42px]")
 
         with ui.list().classes("grid place-items-center h-full w-max-md mt-10"):
             ui.label("Visualización 3D").classes("text-2xl")
-            create_button("Visualizar", scenery_index, is_2d=False)
+            create_button("Visualizar", plan_scenery_index, is_2d=False)
 
             ui.label("Visualización 2D").classes("text-2xl mt-10 mb-3")
             with ui.grid().classes("w-full place-items-start"):
@@ -141,7 +143,7 @@ def plan_options_page(scenery_index: str = "1"):
 
             create_button(
                 "Visualizar",
-                scenery_index,
+                plan_scenery_index,
                 is_2d=True,
             )
 
@@ -161,5 +163,5 @@ def plan_options_page(scenery_index: str = "1"):
                 "value",
                 backward=lambda v: f'min: {v["min"]}, max: {v["max"]}',
             ).classes("mb-5")
-            display_view_filtered_scenery(scenery_index)
+            display_view_filtered_scenery(plan_scenery_index)
     get_footer()
