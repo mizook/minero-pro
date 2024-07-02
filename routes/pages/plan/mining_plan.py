@@ -4,38 +4,24 @@ import multiprocessing
 from nicegui import ui
 
 from app.modeler import open_3d_period_scenery
-from routes.constants import mining_plan_path
+from routes.constants import mining_plan_path, plan_options
 from routes.footer import get_footer
 from routes.go_back_button import get_go_back_button
 from utils.ui_commons import UICommons
 from utils.utils import Utils as utl
 
 
-async def handle_button_click(button, scenery_num: int, title):
-    button.props("loading")
-
-    event = multiprocessing.Event()
-    process = multiprocessing.Process(
-        target=open_3d_period_scenery,
-        args=(scenery_num, title, event),
-    )
-    process.start()
-    await asyncio.to_thread(event.wait)
-    button.props(remove="loading")
-
-
 def create_button(scenery_num: str):
+
     parsed_scenery_num = int(scenery_num)
-    title = f"Periodo {parsed_scenery_num + 1}"
-    button = ui.button(f"Periodo {parsed_scenery_num +1}")
-    button.on(
-        "click",
-        lambda _: asyncio.create_task(
-            handle_button_click(button, parsed_scenery_num, title)
-        ),
-    )
-    button.classes(UICommons.visualization_button_class)
-    return button
+
+    return ui.button(
+        f"Periodo {parsed_scenery_num + 1}",
+        on_click=lambda: ui.navigate.to(plan_options(parsed_scenery_num)),
+    ).classes(UICommons.statistics_button_class)
+
+
+
 
 
 @ui.page(
