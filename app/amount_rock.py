@@ -3,6 +3,8 @@ from utils.utils import Utils as utl
 # Función para sumar la cantidad de roca
 def sum_amount_rock(mineplan_df, coordinates_df):
     amount_rock = 0
+    amount_rock_a = 0
+    amount_rock_b = 0
     amount_metal = 0
     amount_metal_2 = 0
 
@@ -21,7 +23,12 @@ def sum_amount_rock(mineplan_df, coordinates_df):
         else :
             amount_rock += 15375
 
-    return (amount_rock, amount_metal, amount_metal_2)
+        if utl.get_rock_type(x_index, z_index) == "A":
+            amount_rock_a += 15375
+        elif utl.get_rock_type(x_index, z_index) == "B":
+            amount_rock_b += 15375
+
+    return (amount_rock, amount_rock_a, amount_rock_b, amount_metal, amount_metal_2)
 
 # Función para calcular cantidad de roca en un periodo
 def calculate_amount_rock(file_name: str = "1", period: int = 0):
@@ -37,7 +44,7 @@ def calculate_amount_rock(file_name: str = "1", period: int = 0):
     filtered_mineplan_df = mineplan_df[mineplan_df["Period"] == period]
 
     # Calcular la cantidad de roca en un periodo
-    amount_rock, amount_metal, amount_metal_2 = sum_amount_rock(filtered_mineplan_df, coordinates_df)
+    amount_rock, amount_rock_a, amount_rock_b, amount_metal, amount_metal_2 = sum_amount_rock(filtered_mineplan_df, coordinates_df)
 
-    return (amount_rock, amount_metal, amount_metal_2)
+    return (amount_rock, amount_rock_a, amount_rock_b, amount_metal, amount_metal_2)
     
