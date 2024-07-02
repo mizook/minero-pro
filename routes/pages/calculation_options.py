@@ -79,6 +79,7 @@ def on_input_value_change(obj: object):
     global period_value
     period_value = obj.value
 
+# Actualizar el rango de ley
 def on_ore_grade_range_change(obj: object):
     global law_range
     law_range["min"] = obj.value["min"]

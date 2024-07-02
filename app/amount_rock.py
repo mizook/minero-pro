@@ -17,7 +17,9 @@ def sum_amount_rock(mineplan_df, coordinates_df, law_range):
 
         # Si existe la coordenada y se encuentra en el rango, sumar cantidad de roca
         if not coordinates_df[filter_df].empty:
+            # Calcular la ley de metal
             metal_law = (coordinates_df[filter_df]["Metal"].values[0] / coordinates_df[filter_df]["Tonelaje"].values[0]) * 100
+            # Si la ley de metal se encuentra en el rango, sumar cantidad de roca
             if validate_metal_law(metal_law, law_range):
                 amount_rock += coordinates_df[filter_df]["Tonelaje"].values[0]
                 amount_metal += coordinates_df[filter_df]["Metal"].values[0]
