@@ -65,7 +65,67 @@ def max_sum(matrices):
             for z in range(matrices.shape[2] - 2, 2, -1):
                 matrices[x][y][z] += max(matrices[x-1][y][z+1], matrices[x-1][y][z], matrices[x-1][y][z-1] )
 
+def calculate_borderline(matrices, y_pos):
+    max_value = -np.inf
+    max_column = -1
+    for x in range(6, matrices.shape[0]-1):
+        if matrices[x][y_pos][11] > max_value:
+            max_value = matrices[x][y_pos][11]
+            max_column = x
+
+    borderline = [(11, max_column)]
+
+    column = max_column
+    while column > 0:
+        print('hola')
+        actual_rows = borderline[-1][0]
+        
+        column -= 1
+
+        adjacents = []
+        if actual_rows > 0:
+            adjacents.append((actual_rows - 1, column))
+        adjacents.append((actual_rows, column))
+        if actual_rows < matrices.shape[0] - 1 :
+            adjacents.append((actual_rows + 1, column))
+
+        max_value = -np.inf
+        max_position = None
+        for position in adjacents:
+            if matrices[position[1]][y_pos][position[0]] > max_value:
+                max_value = matrices[position[1]][y_pos][position[0]]
+                max_position = position
+        
+        borderline.append(max_position)
+
+        if max_position[0] == 11:
+            break
+
+    for column in range(matrices.shape[0]):
+        row = get_row_borderline(borderline, column)
+        if row == None:
+            for z in range(matrices.shape[2] - 2):
+                matrices[column][y_pos][z] = 0
+        else:
+            for z in range(matrices.shape[2] - 2, row, -1):
+                matrices[column][y_pos][z] = 0
     
+    pit_value = 0
+    for x in range(matrices.shape[0]):
+        for z in range(matrices.shape[2]):
+            pit_value += matrices[x][y_pos][z]
+    
+    return pit_value
+
+
+
+
+def get_row_borderline(borderline, column):
+    for pos in borderline:
+        if pos[1] == column:
+            return pos[0]
+    return None
+
 
 def calcular_upl(file_name):
     x_range = (6, 30)
@@ -74,10 +134,10 @@ def calcular_upl(file_name):
     default_tons = 15375
     default_metal = 0
     metal_value = 10000 #USD/Ton 
-    metal_cost = 1000  
+    metal_cost = 500  
     processing_cost = 200
     foundry_cost = 200
-    metal_recovered = 0.85 
+    metal_recovered = 0.9 
 
     path = utl.get_resource_path(f"data/scenarios/{file_name}")
     coordinates_df = utl.read_coordinates(path)
@@ -87,6 +147,11 @@ def calcular_upl(file_name):
     matrices = create_matrices(coordinates_df)
     calculate_acum(matrices)
     max_sum(matrices)
+    pit_value = 0
+    for y in range(10,22):
+        pit_value += calculate_borderline(matrices, y)
+        
+    print(pit_value)
 
 
     
