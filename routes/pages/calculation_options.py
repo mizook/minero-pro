@@ -11,9 +11,10 @@ from utils.utils import Utils as utl
 
 # Variables globales
 period_value = 1
+law_range: dict = {"min": 0, "max": 100}
 
 # Manejar el evento de hacer click en el botón
-async def handle_button_click(button, file_name, period, is_upl, output_table):
+async def handle_button_click(button, file_name, period, is_upl, output_table, law_range):
     # Agregar estado de carga al botón
     button.props("loading")
     # Si se apretó el botón para calcular UPL
@@ -30,7 +31,7 @@ async def handle_button_click(button, file_name, period, is_upl, output_table):
             return
         # Calcular cantidad de roca en un periodo si el periodo se encuentra en el rango
         if period in range(0,6): 
-            results = calculate_amount_rock(file_name, period - 1)
+            results = calculate_amount_rock(file_name, period - 1, law_range)
             global amount_rock, amount_rock_a, amount_rock_b, amount_metal, amount_metal_2
             amount_rock, amount_rock_a, amount_rock_b, amount_metal, amount_metal_2 = results
 
@@ -47,13 +48,13 @@ async def handle_button_click(button, file_name, period, is_upl, output_table):
     button.props(remove="loading")
 
 # Crear botón para realizar cálculos
-def create_button(button_title, scenario_num, is_upl, output_table):
+def create_button(button_title, scenario_num, is_upl, output_table, law_range):
     file_name = f"Scenario0{scenario_num}.txt"
     button = ui.button(button_title)
     button.on(
         "click",
         lambda _: asyncio.create_task(
-            handle_button_click(button, file_name, period_value, is_upl, output_table)
+            handle_button_click(button, file_name, period_value, is_upl, output_table, law_range)
         ),
     )
     button.classes(UICommons.statistics_button_class)
@@ -78,6 +79,11 @@ def validate_integer_range(value: int) -> str | None:
 def on_input_value_change(obj: object):
     global period_value
     period_value = obj.value
+
+def on_ore_grade_range_change(obj: object):
+    global law_range
+    law_range["min"] = obj.value["min"]
+    law_range["max"] = obj.value["max"]
 
 @ui.page(
     f"{calculations_path}/{calculation_options_path}/{{scenery_index}}",
@@ -133,10 +139,11 @@ def calculation_options_page(scenery_index: str = "1"):
                 int(scenery_index),
                 True,
                 None,
+                None,
             )
 
             # Título de la sección de calcular la cantidad de roca en un periodo
-            ui.label("Cantidad de roca extraída en un periodo").classes("text-2xl")
+            ui.label("Cantidad de roca extraída en un periodo").classes("text-2xl mt-3")
             
 #           # Crear input para ingresar el periodo
             with ui.grid().classes("w-full place-items-start"):
@@ -144,6 +151,18 @@ def calculation_options_page(scenery_index: str = "1"):
             ui.select(periods, value=period_value).classes(
                 "w-full"
             ).on_value_change(callback=on_input_value_change)
+
+            # Crear slide para filtrar por rango de ley
+            with ui.grid().classes("w-full place-items-start mt-10 mb-5"):
+                ui.label("Filtrado por rango de Ley").classes("text-lg text-left")
+            min_max_range = ui.range(
+                min=law_range['min'], max=law_range['max'], value=law_range
+            ).on_value_change(callback=on_ore_grade_range_change)
+            ui.label().bind_text_from(
+                min_max_range,
+                "value",
+                backward=lambda v: f'min: {v["min"]}, max: {v["max"]}',
+            ).classes("mb-5")
 
             # Crear las filas de las cantidades de roca y metal a la tabla
             rows = [
@@ -163,6 +182,7 @@ def calculation_options_page(scenery_index: str = "1"):
                 int(scenery_index),
                 False,
                 output_table,
+                law_range,
             )
 
     get_footer()
