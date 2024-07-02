@@ -2,13 +2,14 @@ import multiprocessing
 import threading
 
 import pyvista as pv
+from jedi.api import file_name
 
 from app.plot_common import PlotCommon
 from utils.utils import Utils as utl
 
 
 def abstract_rendering(
-    file_name: str, ore_grade_range: dict | None = None, rock_type: str | None = None
+        file_name: str, ore_grade_range: dict | None = None, rock_type: str | None = None
 ):
     path = utl.get_resource_path(f"data/scenarios/{file_name}")
     coordinates_df = utl.read_coordinates(path)
@@ -74,6 +75,34 @@ def open_2d_scenery(file_name: str, title: str, axis: str, cord: int, event):
     process.start()
 
 
+def open_2d_plan_scenery(scenery_num, title: str, axis: str, cord: int, event):
+    process = multiprocessing.Process(
+        target=rendering_plan_slice_2d, args=(scenery_num, title, axis, cord, event)
+    )
+    process.start()
+
+
+def rendering_plan_slice_2d(scenery_num: int, title: str, axis: str, cord: int, event):
+    lower_axis = axis.lower()
+    if lower_axis not in ["x", "y", "z"]:
+        raise ValueError("Expected axis value is x,y or z")
+
+    grid, plotter = abstract_period_rendering(scenery_num)
+    sliced_mesh = grid.slice(normal=lower_axis)
+
+    plotter.add_mesh(sliced_mesh, show_edges=True)
+    plotter.show_axes()
+    plotter.show_grid()
+
+    plotter.title = title
+
+    thread = threading.Thread(target=PlotCommon.bring_window_to_front, args=(title,))
+    thread.start()
+
+    plotter.show()
+    event.set()
+
+
 def rendering_3d(file_name: str, title: str, event):
     grid, plotter = abstract_rendering(file_name)
 
@@ -91,7 +120,7 @@ def rendering_3d(file_name: str, title: str, event):
 
 
 def rendering_filtered_3d(
-    file_name: str, title: str, ore_grade_range: dict, rock_type: str, event: any
+        file_name: str, title: str, ore_grade_range: dict, rock_type: str, event: any
 ):
     grid, plotter = abstract_rendering(
         file_name, ore_grade_range=ore_grade_range, rock_type=rock_type
@@ -118,7 +147,7 @@ def open_3d_scenery(file_name: str, title: str, event):
 
 
 def open_3d_filtered_scenery(
-    file_name: str, title: str, ore_grade_range: dict, rock_type: str, event: any
+        file_name: str, title: str, ore_grade_range: dict, rock_type: str, event: any
 ):
     process = multiprocessing.Process(
         target=rendering_filtered_3d,
